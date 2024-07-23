@@ -17,7 +17,6 @@ repos:
         pass_filenames: false
         stages:
           - pre-commit
-          - pre-push
     repo: local
   - hooks:
       - id: prettier
@@ -36,7 +35,6 @@ repos:
           - "prettier@3.3.3"
         stages:
           - pre-commit
-          - pre-push
       - id: eslint
         name: ESLint
         language: node
@@ -54,5 +52,4 @@ repos:
           - "eslint-config-prettier@9.1.0"
         stages:
           - pre-commit
-          - pre-push
     repo: local
