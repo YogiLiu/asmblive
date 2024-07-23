@@ -1,0 +1,58 @@
+repos:
+  - hooks:
+      - id: commitizen
+      - id: commitizen-branch
+        stages:
+          - push
+    repo: https://github.com/commitizen-tools/commitizen
+    rev: v3.27.0
+  - hooks:
+      - id: go-test
+        name: go test
+        language: golang
+        entry: go
+        args: ["test", "./..."]
+        types_or: [go-mod, go-sum, go]
+        exclude: ^frontend/
+        pass_filenames: false
+        stages:
+          - pre-commit
+          - pre-push
+    repo: local
+  - hooks:
+      - id: prettier
+        name: Prettier
+        language: node
+        entry: prettier
+        args:
+          - "--check"
+          - "--ignore-unknown"
+          - "--config"
+          - "frontend/.prettierrc.json"
+        types_or: [javascript, jsx, json, ts, tsx, yaml]
+        files: ^frontend/
+        exclude: ^frontend/wailsjs/
+        additional_dependencies:
+          - "prettier@3.3.3"
+        stages:
+          - pre-commit
+          - pre-push
+      - id: eslint
+        name: ESLint
+        language: node
+        entry: eslint
+        args: ["-c", "frontend/eslint.config.mjs"]
+        types_or: [javascript, jsx, ts, tsx]
+        files: ^frontend/
+        exclude: ^frontend/wailsjs/
+        additional_dependencies:
+          - "eslint@9.x"
+          - "@eslint/js@9.7.0"
+          - "globals@15.8.0"
+          - "typescript-eslint@7.17.0"
+          - "eslint-plugin-solid@0.14.1"
+          - "eslint-config-prettier@9.1.0"
+        stages:
+          - pre-commit
+          - pre-push
+    repo: local
