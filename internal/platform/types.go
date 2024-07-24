@@ -16,11 +16,11 @@ type Platform interface {
 }
 
 type Room struct {
-	Id         string
-	Title      string
-	Owner      string
-	Popularity int
-	CoverUrl   url.URL
+	Id       string
+	Title    string
+	Owner    Owner
+	IsOnline bool
+	CoverUrl url.URL
 }
 
 type Owner struct {
