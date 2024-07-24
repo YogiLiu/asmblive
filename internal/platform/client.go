@@ -8,21 +8,25 @@ import (
 
 type Headers = map[string]string
 
-type Client struct {
+type Client interface {
+	Do(req *http.Request) (*http.Response, error)
+}
+
+type client struct {
 	log *slog.Logger
 	hc  *http.Client
 }
 
 // NewClient returns a new instance of the Client.
 // The parameter `h` is the default headers to be used for all requests.
-func NewClient(l *slog.Logger, h Headers) *Client {
+func NewClient(l *slog.Logger, h Headers) Client {
 	l = l.With("module", "platform/client")
 	tsp := roundTripper{h: h}
 	hc := &http.Client{Transport: tsp}
-	return &Client{log: l, hc: hc}
+	return &client{log: l, hc: hc}
 }
 
-func (c Client) Do(req *http.Request) (*http.Response, error) {
+func (c client) Do(req *http.Request) (*http.Response, error) {
 	res, err := c.hc.Do(req)
 	if err != nil {
 		c.log.Error("request failed", "error", err)

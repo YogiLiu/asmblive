@@ -10,7 +10,7 @@ import (
 )
 
 type biliClient[T any] struct {
-	*platform.Client
+	platform.Client
 	log *slog.Logger
 }
 

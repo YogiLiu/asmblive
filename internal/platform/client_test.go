@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestClient_Do(t *testing.T) {
+func Test_client_Do(t *testing.T) {
 	type fields struct {
 		headers Headers
 		status  int
