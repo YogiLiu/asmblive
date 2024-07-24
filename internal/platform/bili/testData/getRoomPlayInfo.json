@@ -1,0 +1,267 @@
+{
+  "code": 0,
+  "message": "0",
+  "ttl": 1,
+  "data": {
+    "room_id": 7734200,
+    "short_id": 6,
+    "uid": 50329118,
+    "is_hidden": false,
+    "is_locked": false,
+    "is_portrait": false,
+    "live_status": 1,
+    "hidden_till": 0,
+    "lock_till": 0,
+    "encrypted": false,
+    "pwd_verified": true,
+    "live_time": 1687706973,
+    "room_shield": 1,
+    "all_special_types": [
+      19,
+      50
+    ],
+    "playurl_info": {
+      "conf_json": "{\"cdn_rate\":10000,\"report_interval_sec\":150}",
+      "playurl": {
+        "cid": 7734200,
+        "g_qn_desc": [
+          {
+            "qn": 30000,
+            "desc": "杜比",
+            "hdr_desc": "",
+            "attr_desc": null
+          },
+          {
+            "qn": 20000,
+            "desc": "4K",
+            "hdr_desc": "",
+            "attr_desc": null
+          },
+          {
+            "qn": 10000,
+            "desc": "原画",
+            "hdr_desc": "",
+            "attr_desc": null
+          },
+          {
+            "qn": 400,
+            "desc": "蓝光",
+            "hdr_desc": "",
+            "attr_desc": null
+          },
+          {
+            "qn": 250,
+            "desc": "超清",
+            "hdr_desc": "",
+            "attr_desc": null
+          },
+          {
+            "qn": 150,
+            "desc": "高清",
+            "hdr_desc": "",
+            "attr_desc": null
+          },
+          {
+            "qn": 80,
+            "desc": "流畅",
+            "hdr_desc": "",
+            "attr_desc": null
+          }
+        ],
+        "stream": [
+          {
+            "protocol_name": "http_stream",
+            "format": [
+              {
+                "format_name": "flv",
+                "codec": [
+                  {
+                    "codec_name": "avc",
+                    "current_qn": 400,
+                    "accept_qn": [
+                      10000,
+                      400,
+                      250,
+                      150
+                    ],
+                    "base_url": "/live-bvc/493088/live_7734200_bs_1348183_4000.flv?",
+                    "url_info": [
+                      {
+                        "host": "https://d1--cn-gotcha09.bilivideo.com",
+                        "extra": "expires=1721816094\u0026len=0\u0026oi=1032645012\u0026pt=web\u0026qn=400\u0026trid=10004bf1a718483e97123c8e391d3f66a0c6\u0026sigparams=cdn,expires,len,oi,pt,qn,trid\u0026cdn=cn-gotcha09\u0026sign=5aa0330b6f947c88df225a90bddf56fc\u0026site=caeaddcf4f7cad988bbf35a15327bd7f\u0026sl=10\u0026free_type=0\u0026mid=7494865\u0026sche=ban\u0026score=18\u0026trace=16\u0026pp=rtmp\u0026source=puv3_onetier\u0026sk=1a07ed4789ccd2ddae319a938c915e2f\u0026suffix=4000\u0026hot_cdn=909765\u0026qp=co\u0026deploy_env=prod\u0026score=18\u0026origin_bitrate=976995\u0026sl=10\u0026p2p_type=1\u0026src=puv3",
+                        "stream_ttl": 0
+                      }
+                    ],
+                    "hdr_qn": null,
+                    "dolby_type": 0,
+                    "attr_name": ""
+                  },
+                  {
+                    "codec_name": "hevc",
+                    "current_qn": 400,
+                    "accept_qn": [
+                      10000,
+                      400,
+                      250
+                    ],
+                    "base_url": "/live-bvc/895151/live_50329118_9516950_hevc.flv?",
+                    "url_info": [
+                      {
+                        "host": "https://d1--cn-gotcha09.bilivideo.com",
+                        "extra": "expires=1721816094\u0026len=0\u0026oi=1032645012\u0026pt=web\u0026qn=400\u0026trid=10004bf1a718483e97123c8e391d3f66a0c6\u0026sigparams=cdn,expires,len,oi,pt,qn,trid\u0026cdn=cn-gotcha09\u0026sign=1965876232ed9bc6320efb07e9eea092\u0026site=caeaddcf4f7cad988bbf35a15327bd7f\u0026sl=10\u0026free_type=0\u0026mid=7494865\u0026sche=ban\u0026score=18\u0026trace=16\u0026hot_cdn=909765\u0026pp=rtmp\u0026sk=d3e1e0ff3575e55fd796bb2054ea1a53\u0026deploy_env=prod\u0026origin_bitrate=974395\u0026sl=10\u0026qp=co\u0026score=18\u0026p2p_type=1\u0026source=puv3_onetier\u0026suffix=hevc\u0026src=puv3",
+                        "stream_ttl": 0
+                      }
+                    ],
+                    "hdr_qn": null,
+                    "dolby_type": 0,
+                    "attr_name": ""
+                  }
+                ],
+                "master_url": ""
+              }
+            ]
+          },
+          {
+            "protocol_name": "http_hls",
+            "format": [
+              {
+                "format_name": "ts",
+                "codec": [
+                  {
+                    "codec_name": "avc",
+                    "current_qn": 400,
+                    "accept_qn": [
+                      10000,
+                      400,
+                      250,
+                      150
+                    ],
+                    "base_url": "/live-bvc/405122/live_50329118_9516950_4000.m3u8?",
+                    "url_info": [
+                      {
+                        "host": "https://d1--cn-gotcha104.bilivideo.com",
+                        "extra": "expires=1721816094\u0026len=0\u0026oi=1032645012\u0026pt=web\u0026qn=400\u0026trid=10034bf1a718483e97123c8e391d3f66a0c6\u0026sigparams=cdn,expires,len,oi,pt,qn,trid\u0026cdn=cn-gotcha104\u0026sign=a7f0610466cb5937e84a4325ee6c00b6\u0026site=caeaddcf4f7cad988bbf35a15327bd7f\u0026sl=10\u0026free_type=0\u0026mid=7494865\u0026sche=ban\u0026score=18\u0026trace=16\u0026p2p_type=1\u0026score=18\u0026suffix=4000\u0026sl=10\u0026origin_bitrate=974395\u0026sk=d3e1e0ff3575e55fd796bb2054ea1a53\u0026hot_cdn=909765\u0026pp=rtmp\u0026qp=co\u0026deploy_env=prod\u0026source=puv3_onetier\u0026src=puv3",
+                        "stream_ttl": 0
+                      }
+                    ],
+                    "hdr_qn": null,
+                    "dolby_type": 0,
+                    "attr_name": ""
+                  },
+                  {
+                    "codec_name": "hevc",
+                    "current_qn": 400,
+                    "accept_qn": [
+                      10000,
+                      400,
+                      250
+                    ],
+                    "base_url": "/live-bvc/947813/live_50329118_9516950_hevc.m3u8?",
+                    "url_info": [
+                      {
+                        "host": "https://d1--cn-gotcha104.bilivideo.com",
+                        "extra": "expires=1721816094\u0026len=0\u0026oi=1032645012\u0026pt=web\u0026qn=400\u0026trid=10034bf1a718483e97123c8e391d3f66a0c6\u0026sigparams=cdn,expires,len,oi,pt,qn,trid\u0026cdn=cn-gotcha104\u0026sign=8a82621434dff5991ab9115fdc01ca20\u0026site=caeaddcf4f7cad988bbf35a15327bd7f\u0026sl=10\u0026free_type=0\u0026mid=7494865\u0026sche=ban\u0026score=18\u0026trace=16\u0026sk=d3e1e0ff3575e55fd796bb2054ea1a53\u0026score=18\u0026pp=rtmp\u0026p2p_type=1\u0026hot_cdn=909765\u0026suffix=hevc\u0026sl=10\u0026qp=co\u0026origin_bitrate=974395\u0026source=puv3_onetier\u0026deploy_env=prod\u0026src=puv3",
+                        "stream_ttl": 0
+                      }
+                    ],
+                    "hdr_qn": null,
+                    "dolby_type": 0,
+                    "attr_name": ""
+                  }
+                ],
+                "master_url": ""
+              },
+              {
+                "format_name": "fmp4",
+                "codec": [
+                  {
+                    "codec_name": "avc",
+                    "current_qn": 400,
+                    "accept_qn": [
+                      10000,
+                      400,
+                      250,
+                      150
+                    ],
+                    "base_url": "/live-bvc/293527/live_50329118_9516950_4000/index.m3u8?",
+                    "url_info": [
+                      {
+                        "host": "https://xy61x147x214x138xy.mcdn.bilivideo.cn:486",
+                        "extra": "expires=1721816094\u0026len=0\u0026oi=1032645012\u0026pt=web\u0026qn=400\u0026trid=10074bf1a718483e97123c8e391d3f66a0c6\u0026sigparams=cdn,expires,len,oi,pt,qn,trid\u0026cdn=cn-gotcha16\u0026sign=a7dae06aff1b516eed7b356b2022f123\u0026site=caeaddcf4f7cad988bbf35a15327bd7f\u0026sl=10\u0026free_type=0\u0026mid=7494865\u0026sche=ban\u0026bvchls=1\u0026sid=mcdn-jd-jsnt-ct-50004767\u0026chash=0\u0026bmt=1\u0026sg=lr\u0026score=18\u0026trace=4194321\u0026sl=10\u0026sk=c631df6078f80f4f3f7f34bf7bdec842\u0026deploy_env=prod\u0026hot_cdn=909765\u0026origin_bitrate=974395\u0026flvsk=d3e1e0ff3575e55fd796bb2054ea1a53\u0026qp=co\u0026p2p_type=1\u0026score=18\u0026pp=rtmp\u0026source=puv3_onetier\u0026suffix=4000\u0026zoneid_l=151371777\u0026sid_l=live_50329118_9516950_4000\u0026src=puv3",
+                        "stream_ttl": 0
+                      },
+                      {
+                        "host": "https://xy112x3x25x8xy.mcdn.bilivideo.cn:486",
+                        "extra": "expires=1721816094\u0026len=0\u0026oi=1032645012\u0026pt=web\u0026qn=400\u0026trid=10074bf1a718483e97123c8e391d3f66a0c6\u0026sigparams=cdn,expires,len,oi,pt,qn,trid\u0026cdn=cn-gotcha16\u0026sign=a7dae06aff1b516eed7b356b2022f123\u0026site=caeaddcf4f7cad988bbf35a15327bd7f\u0026sl=10\u0026free_type=0\u0026mid=7494865\u0026sche=ban\u0026bvchls=1\u0026sid=mcdn-bili-jssq-ct-50005726\u0026chash=0\u0026bmt=1\u0026sg=lr\u0026score=18\u0026trace=4194321\u0026qp=co\u0026p2p_type=1\u0026score=18\u0026pp=rtmp\u0026source=puv3_onetier\u0026suffix=4000\u0026sl=10\u0026sk=c631df6078f80f4f3f7f34bf7bdec842\u0026deploy_env=prod\u0026hot_cdn=909765\u0026origin_bitrate=974395\u0026flvsk=d3e1e0ff3575e55fd796bb2054ea1a53\u0026zoneid_l=151371777\u0026sid_l=live_50329118_9516950_4000\u0026src=puv3",
+                        "stream_ttl": 0
+                      },
+                      {
+                        "host": "https://d1--cn-gotcha209.bilivideo.com",
+                        "extra": "expires=1721816094\u0026len=0\u0026oi=1032645012\u0026pt=web\u0026qn=400\u0026trid=10074bf1a718483e97123c8e391d3f66a0c6\u0026sigparams=cdn,expires,len,oi,pt,qn,trid\u0026cdn=cn-gotcha209\u0026sign=3bbe7accc475fb3dd68e062f5d82568b\u0026site=caeaddcf4f7cad988bbf35a15327bd7f\u0026sl=10\u0026free_type=0\u0026mid=7494865\u0026sche=ban\u0026bvchls=1\u0026score=18\u0026trace=16\u0026deploy_env=prod\u0026hot_cdn=909765\u0026origin_bitrate=974395\u0026flvsk=d3e1e0ff3575e55fd796bb2054ea1a53\u0026sl=10\u0026sk=c631df6078f80f4f3f7f34bf7bdec842\u0026score=18\u0026pp=rtmp\u0026source=puv3_onetier\u0026suffix=4000\u0026qp=co\u0026p2p_type=1\u0026src=puv3",
+                        "stream_ttl": 0
+                      },
+                      {
+                        "host": "https://d1--cn-gotcha208.bilivideo.com",
+                        "extra": "expires=1721816094\u0026len=0\u0026oi=1032645012\u0026pt=web\u0026qn=400\u0026trid=10074bf1a718483e97123c8e391d3f66a0c6\u0026sigparams=cdn,expires,len,oi,pt,qn,trid\u0026cdn=cn-gotcha208\u0026sign=4c8663eabda22e15cedf80ebd808ca9f\u0026site=caeaddcf4f7cad988bbf35a15327bd7f\u0026sl=10\u0026free_type=0\u0026mid=7494865\u0026sche=ban\u0026bvchls=1\u0026score=18\u0026trace=16\u0026source=puv3_onetier\u0026suffix=4000\u0026qp=co\u0026p2p_type=1\u0026score=18\u0026pp=rtmp\u0026origin_bitrate=974395\u0026flvsk=d3e1e0ff3575e55fd796bb2054ea1a53\u0026sl=10\u0026sk=c631df6078f80f4f3f7f34bf7bdec842\u0026deploy_env=prod\u0026hot_cdn=909765\u0026src=puv3",
+                        "stream_ttl": 0
+                      }
+                    ],
+                    "hdr_qn": null,
+                    "dolby_type": 0,
+                    "attr_name": ""
+                  },
+                  {
+                    "codec_name": "hevc",
+                    "current_qn": 400,
+                    "accept_qn": [
+                      10000,
+                      400,
+                      250
+                    ],
+                    "base_url": "/live-bvc/223177/live_50329118_9516950_hevc/index.m3u8?",
+                    "url_info": [
+                      {
+                        "host": "https://xy61x147x214x138xy.mcdn.bilivideo.cn:486",
+                        "extra": "expires=1721816094\u0026len=0\u0026oi=1032645012\u0026pt=web\u0026qn=400\u0026trid=10074bf1a718483e97123c8e391d3f66a0c6\u0026sigparams=cdn,expires,len,oi,pt,qn,trid\u0026cdn=cn-gotcha16\u0026sign=5f9674b87fbfa8e6c6ae06b2b93becb5\u0026site=caeaddcf4f7cad988bbf35a15327bd7f\u0026sl=10\u0026free_type=0\u0026mid=7494865\u0026sche=ban\u0026bvchls=1\u0026sid=mcdn-jd-jsnt-ct-50004767\u0026chash=0\u0026bmt=1\u0026sg=lr\u0026score=18\u0026trace=4194321\u0026qp=co\u0026source=puv3_onetier\u0026deploy_env=prod\u0026hot_cdn=909765\u0026origin_bitrate=974395\u0026sl=10\u0026pp=rtmp\u0026p2p_type=1\u0026suffix=hevc\u0026flvsk=d3e1e0ff3575e55fd796bb2054ea1a53\u0026sk=c631df6078f80f4f3f7f34bf7bdec842\u0026score=18\u0026zoneid_l=151371777\u0026sid_l=live_50329118_9516950_hevc\u0026src=puv3",
+                        "stream_ttl": 0
+                      },
+                      {
+                        "host": "https://xy116x207x182x2xy.mcdn.bilivideo.cn:486",
+                        "extra": "expires=1721816094\u0026len=0\u0026oi=1032645012\u0026pt=web\u0026qn=400\u0026trid=10074bf1a718483e97123c8e391d3f66a0c6\u0026sigparams=cdn,expires,len,oi,pt,qn,trid\u0026cdn=cn-gotcha16\u0026sign=5f9674b87fbfa8e6c6ae06b2b93becb5\u0026site=caeaddcf4f7cad988bbf35a15327bd7f\u0026sl=10\u0026free_type=0\u0026mid=7494865\u0026sche=ban\u0026bvchls=1\u0026sid=mcdn-ppio-hbyc-ct-50004738\u0026chash=0\u0026bmt=1\u0026sg=lr\u0026score=18\u0026trace=4194321\u0026p2p_type=1\u0026qp=co\u0026source=puv3_onetier\u0026deploy_env=prod\u0026hot_cdn=909765\u0026origin_bitrate=974395\u0026sl=10\u0026pp=rtmp\u0026score=18\u0026suffix=hevc\u0026flvsk=d3e1e0ff3575e55fd796bb2054ea1a53\u0026sk=c631df6078f80f4f3f7f34bf7bdec842\u0026zoneid_l=151371777\u0026sid_l=live_50329118_9516950_hevc\u0026src=puv3",
+                        "stream_ttl": 0
+                      },
+                      {
+                        "host": "https://d1--cn-gotcha209.bilivideo.com",
+                        "extra": "expires=1721816094\u0026len=0\u0026oi=1032645012\u0026pt=web\u0026qn=400\u0026trid=10074bf1a718483e97123c8e391d3f66a0c6\u0026sigparams=cdn,expires,len,oi,pt,qn,trid\u0026cdn=cn-gotcha209\u0026sign=485d440457356ce527ad53db4508b232\u0026site=caeaddcf4f7cad988bbf35a15327bd7f\u0026sl=10\u0026free_type=0\u0026mid=7494865\u0026sche=ban\u0026bvchls=1\u0026score=18\u0026trace=16\u0026sk=c631df6078f80f4f3f7f34bf7bdec842\u0026score=18\u0026suffix=hevc\u0026flvsk=d3e1e0ff3575e55fd796bb2054ea1a53\u0026sl=10\u0026pp=rtmp\u0026p2p_type=1\u0026qp=co\u0026source=puv3_onetier\u0026deploy_env=prod\u0026hot_cdn=909765\u0026origin_bitrate=974395\u0026src=puv3",
+                        "stream_ttl": 0
+                      },
+                      {
+                        "host": "https://d1--cn-gotcha208.bilivideo.com",
+                        "extra": "expires=1721816094\u0026len=0\u0026oi=1032645012\u0026pt=web\u0026qn=400\u0026trid=10074bf1a718483e97123c8e391d3f66a0c6\u0026sigparams=cdn,expires,len,oi,pt,qn,trid\u0026cdn=cn-gotcha208\u0026sign=3d016e35e88611485b666f34cf6307f9\u0026site=caeaddcf4f7cad988bbf35a15327bd7f\u0026sl=10\u0026free_type=0\u0026mid=7494865\u0026sche=ban\u0026bvchls=1\u0026score=18\u0026trace=16\u0026hot_cdn=909765\u0026origin_bitrate=974395\u0026sl=10\u0026pp=rtmp\u0026p2p_type=1\u0026qp=co\u0026source=puv3_onetier\u0026deploy_env=prod\u0026sk=c631df6078f80f4f3f7f34bf7bdec842\u0026score=18\u0026suffix=hevc\u0026flvsk=d3e1e0ff3575e55fd796bb2054ea1a53\u0026src=puv3",
+                        "stream_ttl": 0
+                      }
+                    ],
+                    "hdr_qn": null,
+                    "dolby_type": 0,
+                    "attr_name": ""
+                  }
+                ],
+                "master_url": "https://api.live.bilibili.com/live-bvc/master.m3u8?cid=7734200\u0026mid=7494865\u0026pt=web\u0026p2p_type=1\u0026net=0"
+              }
+            ]
+          }
+        ],
+        "p2p_data": {
+          "p2p": true,
+          "p2p_type": 1,
+          "m_p2p": false,
+          "m_servers": null
+        },
+        "dolby_qn": null
+      }
+    },
+    "official_type": 0,
+    "official_room_id": 0,
+    "risk_with_delay": 0
+  }
+}

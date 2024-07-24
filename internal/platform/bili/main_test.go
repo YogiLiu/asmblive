@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"strings"
 	"testing"
 )
 
@@ -147,6 +148,150 @@ func TestBili_GetRoom(t *testing.T) {
 			}
 			assert.NoError(t, err)
 			assert.Equal(t, tt.want, got)
+		})
+	}
+}
+
+func TestBili_GetQualities(t *testing.T) {
+	type fields struct {
+		pc platform.Client
+	}
+	type args struct {
+		roomId string
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    []platform.Quality
+		wantErr string
+	}{
+		{
+			name: "should return qualities",
+			fields: fields{
+				pc: func() platform.Client {
+					data, _ := os.ReadFile("testData/getRoomPlayInfo.json")
+					return mc{res: data}
+				}(),
+			},
+			args: args{
+				roomId: "6",
+			},
+			want: []platform.Quality{
+				{
+					Id:       "10000",
+					Name:     "原画",
+					Priority: 0,
+				},
+				{
+					Id:       "400",
+					Name:     "蓝光",
+					Priority: -1,
+				},
+				{
+					Id:       "250",
+					Name:     "超清",
+					Priority: -2,
+				},
+				{
+					Id:       "150",
+					Name:     "高清",
+					Priority: -3,
+				},
+			},
+		},
+		{
+			name: "should return error since 60004 code",
+			fields: fields{
+				pc: func() platform.Client {
+					return mc{res: []byte("{\"code\":60004,\"message\":\"房间不存在\",\"ttl\":1,\"data\":null}")}
+				}(),
+			},
+			args: args{
+				roomId: "6",
+			},
+			wantErr: "unexpected response code: 60004, message: 房间不存在",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			b := Bili{
+				log: slog.Default(),
+				pc:  tt.fields.pc,
+				su:  url.URL{},
+			}
+			got, err := b.GetQualities(context.TODO(), tt.args.roomId)
+			if tt.wantErr != "" {
+				assert.ErrorContains(t, err, tt.wantErr)
+				return
+			}
+			assert.NoError(t, err)
+			assert.Equal(t, tt.want, got)
+		})
+	}
+}
+
+func TestBili_GetLiveUrls(t *testing.T) {
+	type fields struct {
+		pc platform.Client
+	}
+	type args struct {
+		roomId    string
+		qualityId string
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr string
+	}{
+		{
+			name: "should return live urls",
+			fields: fields{
+				pc: func() platform.Client {
+					data, _ := os.ReadFile("testData/getRoomPlayInfo_qn_250.json")
+					return mc{res: data}
+				}(),
+			},
+			args: args{
+				roomId: "6",
+			},
+		},
+		{
+			name: "should return error since 60004 code",
+			fields: fields{
+				pc: func() platform.Client {
+					return mc{res: []byte("{\"code\":60004,\"message\":\"房间不存在\",\"ttl\":1,\"data\":null}")}
+				}(),
+			},
+			args: args{
+				roomId: "6",
+			},
+			wantErr: "unexpected response code: 60004, message: 房间不存在",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			b := Bili{
+				log: slog.Default(),
+				pc:  tt.fields.pc,
+				su:  url.URL{},
+			}
+			got, err := b.GetLiveUrls(context.TODO(), tt.args.roomId, tt.args.qualityId)
+			if tt.wantErr != "" {
+				assert.ErrorContains(t, err, tt.wantErr)
+				return
+			}
+			assert.NoError(t, err)
+			mcdns := make([]url.URL, 0)
+			for _, u := range got {
+				assert.NotEmpty(t, u.String())
+				if strings.Contains(u.Host, "mcdn") {
+					mcdns = append(mcdns, u)
+				}
+			}
+			// ensure mcdn is in the last
+			assert.Equal(t, mcdns, got[len(got)-len(mcdns):])
 		})
 	}
 }
