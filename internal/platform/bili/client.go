@@ -9,12 +9,19 @@ import (
 	"strings"
 )
 
+var commonHeaders = map[string]string{
+	"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.82 Safari/537.36 OPR/79.0.4143.50",
+}
+
 type biliClient[T any] struct {
 	platform.Client
 	log *slog.Logger
 }
 
 func (c biliClient[T]) getJson(req *http.Request) (*T, error) {
+	for k, v := range commonHeaders {
+		req.Header.Set(k, v)
+	}
 	res, err := c.Do(req)
 	if err != nil {
 		return nil, platform.ErrRequest(err)
