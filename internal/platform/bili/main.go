@@ -2,7 +2,6 @@ package bili
 
 import (
 	"asmblive/internal/platform"
-	"asmblive/internal/proxy"
 	"context"
 	"log/slog"
 	"net/url"
@@ -11,15 +10,16 @@ import (
 type Bili struct {
 	log *slog.Logger
 	hc  *platform.Client
-	prx *proxy.Proxy
+	// built-in HTTP server base URL
+	su url.URL
 }
 
-func NewBili(l *slog.Logger, c *platform.Client, p *proxy.Proxy) *Bili {
+func NewBili(l *slog.Logger, c *platform.Client, su url.URL) *Bili {
 	l = l.With("module", "platform/bili")
 	return &Bili{
 		log: l,
 		hc:  c,
-		prx: p,
+		su:  su,
 	}
 }
 
