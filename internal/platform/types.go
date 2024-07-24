@@ -10,6 +10,7 @@ type Platform interface {
 	Name() string
 	IconUrl() url.URL
 
+	GetRoom(ctx context.Context, roomId string) (Room, error)
 	GetQualities(ctx context.Context, roomId string) ([]Quality, error)
 	GetLiveUrls(ctx context.Context, roomId string, qualityId string) ([]url.URL, error)
 }
