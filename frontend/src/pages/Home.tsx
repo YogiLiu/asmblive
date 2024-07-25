@@ -7,10 +7,10 @@ const Home: Component = () => {
     <div>
       <For each={platforms()}>
         {(platform) => (
-          <div>
+          <div class={'font-bold'}>
             <img src={platform.iconUrl} alt={platform.name} />
-            <span>{platform.id}</span>
-            <span>{platform.name}</span>
+            <span class={'text-red-500'}>{platform.id}</span>
+            <span class={'text-sky-500'}>{platform.name}</span>
           </div>
         )}
       </For>
