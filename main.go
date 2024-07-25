@@ -35,6 +35,7 @@ func main() {
 		Bind: []interface{}{
 			srv,
 		},
+		Logger: logger{log: log.With("module", "wails")},
 	})
 
 	if err != nil {
