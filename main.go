@@ -1,7 +1,10 @@
 package main
 
 import (
+	"asmblive/internal/service"
 	"embed"
+	"log/slog"
+	"os"
 
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
@@ -12,8 +15,11 @@ import (
 var assets embed.FS
 
 func main() {
+	hdl := slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: slog.LevelInfo})
+	log := slog.New(hdl)
+
 	// Create an instance of the app structure
-	//app := NewApp()
+	srv, st, sd := service.New(log)
 
 	// Create application with options
 	err := wails.Run(&options.App{
@@ -24,9 +30,10 @@ func main() {
 			Assets: assets,
 		},
 		BackgroundColour: options.NewRGB(255, 255, 255),
-		//OnStartup:        app.startup,
+		OnStartup:        st,
+		OnShutdown:       sd,
 		Bind: []interface{}{
-			//app,
+			srv,
 		},
 	})
 

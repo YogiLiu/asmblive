@@ -15,16 +15,13 @@ import (
 type Bili struct {
 	log *slog.Logger
 	pc  platform.Client
-	// built-in HTTP server base URL
-	su url.URL
 }
 
-func NewBili(l *slog.Logger, c platform.Client, su url.URL) *Bili {
+func NewBili(l *slog.Logger, c platform.Client) *Bili {
 	l = l.With("module", "platform/bili")
 	return &Bili{
 		log: l,
 		pc:  c,
-		su:  su,
 	}
 }
 

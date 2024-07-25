@@ -16,17 +16,17 @@ import (
 
 func TestNewBili(t *testing.T) {
 	t.Run("should return an id", func(t *testing.T) {
-		bili := NewBili(slog.Default(), nil, url.URL{})
+		bili := NewBili(slog.Default(), nil)
 		assert.Equal(t, "bili", bili.Id())
 	})
 
 	t.Run("should return a name", func(t *testing.T) {
-		bili := NewBili(slog.Default(), nil, url.URL{})
+		bili := NewBili(slog.Default(), nil)
 		assert.Equal(t, "哔哩哔哩直播", bili.Name())
 	})
 
 	t.Run("should return an icon", func(t *testing.T) {
-		bili := NewBili(slog.Default(), nil, url.URL{})
+		bili := NewBili(slog.Default(), nil)
 		u := bili.IconUrl()
 		assert.Equal(t, "https://www.bilibili.com/favicon.ico", u.String())
 	})
@@ -139,7 +139,6 @@ func TestBili_GetRoom(t *testing.T) {
 			b := Bili{
 				log: slog.Default(),
 				pc:  tt.fields.pc,
-				su:  url.URL{},
 			}
 			got, err := b.GetRoom(context.TODO(), tt.args.roomId)
 			if tt.wantErr != "" {
@@ -218,7 +217,6 @@ func TestBili_GetQualities(t *testing.T) {
 			b := Bili{
 				log: slog.Default(),
 				pc:  tt.fields.pc,
-				su:  url.URL{},
 			}
 			got, err := b.GetQualities(context.TODO(), tt.args.roomId)
 			if tt.wantErr != "" {
@@ -275,7 +273,6 @@ func TestBili_GetLiveUrls(t *testing.T) {
 			b := Bili{
 				log: slog.Default(),
 				pc:  tt.fields.pc,
-				su:  url.URL{},
 			}
 			got, err := b.GetLiveUrls(context.TODO(), tt.args.roomId, tt.args.qualityId)
 			if tt.wantErr != "" {
