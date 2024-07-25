@@ -6,4 +6,4 @@ export default [
     path: '/',
     component: Home,
   },
-] as RouteDefinition
+] satisfies RouteDefinition[]
