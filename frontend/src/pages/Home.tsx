@@ -1,5 +1,5 @@
 import { Component, createResource, For } from 'solid-js'
-import { GetPlatforms } from '../../wailsjs/go/service/Service'
+import { GetPlatforms } from 'wails/go/service/Service'
 
 const Home: Component = () => {
   const [platforms] = createResource(GetPlatforms, { initialValue: [] })
