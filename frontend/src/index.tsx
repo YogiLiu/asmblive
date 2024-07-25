@@ -4,7 +4,7 @@ import { render } from 'solid-js/web'
 import './index.css'
 import App from './App'
 import { MemoryRouter } from '@solidjs/router'
-import routes from './routes.tsx'
+import routes from './routes'
 
 const root = document.getElementById('root')
 
