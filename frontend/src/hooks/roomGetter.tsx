@@ -147,7 +147,7 @@ const Result: Component<{
             }
           >
             <div class={'relative'}>
-              {/* 直播状态 */}
+              {/* online status */}
               <span
                 class={'absolute top-0 right-0 h-2 w-2 rounded-full'}
                 classList={{
@@ -164,13 +164,13 @@ const Result: Component<{
                   'bg-success': props.room!.isOnline,
                 }}
               ></span>
-              {/* 主播头像 */}
+              {/* owner avatar */}
               <img
                 class={'rounded-box border border-primary w-12 h-12'}
                 src={props.room!.owner!.avatarUrl}
                 alt={props.room!.owner!.name}
               />
-              {/* 平台图标 */}
+              {/* platform icon */}
               <img
                 class={
                   'absolute w-5 h-5 bottom-0 right-0 bg-base-200 rounded-full p-1'
