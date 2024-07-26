@@ -112,6 +112,8 @@ const Form: Component<{ onSubmit: (args: [string, string]) => void }> = (
                 alt={platform.name}
               />
             </button>
+            {/* Must place 'col-span-10' class in here, otherwise the width cannot fill the parent in webview,
+             it assumes  the number of platforms less as 9, if not, please set correct value. */}
             <div
               role={'tabpanel'}
               class={
