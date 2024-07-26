@@ -1,19 +1,14 @@
-import { Component, createResource, For } from 'solid-js'
-import { GetPlatforms } from 'wails/go/service/Service'
+import { Component } from 'solid-js'
+import { useRoomGetter } from '../hooks/roomGetter'
 
 const Home: Component = () => {
-  const [platforms] = createResource(GetPlatforms, { initialValue: [] })
+  const [roomGetter, setShow] = useRoomGetter((room) => console.log(room))
   return (
     <div>
-      <For each={platforms()}>
-        {(platform) => (
-          <div class={'font-bold'}>
-            <img src={platform.iconUrl} alt={platform.name} />
-            <span class={'text-red-500'}>{platform.id}</span>
-            <span class={'text-sky-500'}>{platform.name}</span>
-          </div>
-        )}
-      </For>
+      <button onClick={setShow} class={'btn btn-secondary-content'}>
+        <span class={'iconify ph--plus-bold'}> </span>
+      </button>
+      {roomGetter}
     </div>
   )
 }
