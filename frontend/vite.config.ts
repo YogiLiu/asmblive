@@ -8,7 +8,7 @@ export default defineConfig({
   plugins: [solid()],
   css: {
     postcss: {
-      plugins: [autoprefixer, tailwindcss],
+      plugins: [tailwindcss, autoprefixer],
     },
   },
   resolve: {

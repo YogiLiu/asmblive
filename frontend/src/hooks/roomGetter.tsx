@@ -88,38 +88,59 @@ const Form: Component<{ onSubmit: (args: [string, string]) => void }> = (
   ) => {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
-    const pid = (data.get('platform') as string) || ''
+    const pid = (data.get('platformId') as string) || ''
     const rid = (data.get('roomId') as string) || ''
     if (pid && rid) {
       props.onSubmit([pid, rid])
     }
   }
+  const [tab, setTab] = createSignal(0)
   return (
-    <form
-      onSubmit={submitHandler}
-      class={'flex rounded-box border border-primary overflow-hidden p-2'}
-    >
-      <select
-        name={'platform'}
-        class={'select border-none h-auto min-h-fit focus:outline-none'}
-      >
-        <For each={platforms()}>
-          {(platform) => <option value={platform.id}>{platform.name}</option>}
-        </For>
-      </select>
-      <input
-        name={'roomId'}
-        type={'text'}
-        class={'outline-none flex-grow'}
-        placeholder={'输入房间号'}
-        maxLength={32}
-        required={true}
-        autofocus={true}
-      />
-      <button type={'submit'} class={'btn btn-sm btn-primary'}>
-        <span class={'iconify ph--magnifying-glass'}></span>
-      </button>
-    </form>
+    <div class={'tabs tabs-lifted'} role={'tablist'}>
+      <For each={platforms()}>
+        {(platform, idx) => (
+          <>
+            <button
+              role={'tab'}
+              class={'tab'}
+              onClick={() => setTab(idx())}
+              classList={{ 'tab-active': tab() === idx() }}
+            >
+              <img
+                class={'w-4 h-4'}
+                src={platform.iconUrl}
+                alt={platform.name}
+              />
+            </button>
+            <div
+              role={'tabpanel'}
+              class={
+                'tab-content rounded-box border border-base-300 px-4 py-2 col-span-10'
+              }
+            >
+              <form class={'flex'} onSubmit={submitHandler}>
+                <input
+                  type={'hidden'}
+                  name={'platformId'}
+                  value={platform.id}
+                />
+                <input
+                  name={'roomId'}
+                  type={'text'}
+                  class={'outline-none flex-grow'}
+                  placeholder={`请输入${platform.name}房间号`}
+                  maxLength={32}
+                  autofocus={true}
+                />
+                <button type={'submit'} class={'btn btn-sm btn-primary'}>
+                  <span class={'iconify ph--magnifying-glass'} />
+                </button>
+              </form>
+            </div>
+          </>
+        )}
+      </For>
+    </div>
   )
 }
 
@@ -128,72 +149,70 @@ const Result: Component<{
   onSelect: OnSelect
 }> = (props) => {
   return (
-    <div>
-      <Show when={props.room} fallback={<Empty />}>
+    <Show when={props.room} fallback={<Empty />}>
+      <div
+        onClick={() => props.onSelect(props.room!)}
+        class={
+          'mt-4 rounded-box overflow-hidden relative hover:outline outline-accent outline-offset-2 cursor-pointer'
+        }
+      >
+        <img
+          class={'w-full aspect-h-9'}
+          src={props.room!.coverUrl}
+          alt={props.room!.title}
+        />
         <div
-          onClick={() => props.onSelect(props.room!)}
           class={
-            'mt-4 rounded-box overflow-hidden relative hover:outline outline-accent outline-offset-2'
+            'absolute left-0 bottom-0 w-full p-2 bg-secondary-content bg-opacity-85 flex gap-2'
           }
         >
-          <img
-            class={'w-full'}
-            src={props.room!.coverUrl}
-            alt={props.room!.title}
-          />
-          <div
-            class={
-              'absolute left-0 bottom-0 w-full p-2 bg-secondary-content bg-opacity-85 flex gap-2'
-            }
-          >
-            <div class={'relative'}>
-              {/* online status */}
-              <span
-                class={'absolute top-0 right-0 h-2 w-2 rounded-full'}
-                classList={{
-                  'bg-warning': !props.room!.isOnline,
-                  'bg-success': props.room!.isOnline,
-                }}
-              ></span>
-              <span
-                class={
-                  'animate-ping absolute top-0 right-0 h-2 w-2 rounded-full bg-success opacity-75'
-                }
-                classList={{
-                  'bg-warning': !props.room!.isOnline,
-                  'bg-success': props.room!.isOnline,
-                }}
-              ></span>
-              {/* owner avatar */}
-              <img
-                class={'rounded-box border border-primary w-12 h-12'}
-                src={props.room!.owner!.avatarUrl}
-                alt={props.room!.owner!.name}
-              />
-              {/* platform icon */}
-              <img
-                class={
-                  'absolute w-5 h-5 bottom-0 right-0 bg-base-200 rounded-full p-1'
-                }
-                src={props.room!.platform!.iconUrl}
-                alt={props.room!.platform!.name}
-              />
-            </div>
-            <div>
-              <div class={'font-bold text-lg'}>{props.room!.title}</div>
-              <div class={'text-md'}>{props.room!.owner!.name}</div>
-            </div>
+          <div class={'relative'}>
+            {/* online status */}
+            <span
+              class={'absolute top-0 right-0 h-2 w-2 rounded-full'}
+              classList={{
+                'bg-warning': !props.room!.isOnline,
+                'bg-success': props.room!.isOnline,
+              }}
+            />
+            <span
+              class={
+                'animate-ping absolute top-0 right-0 h-2 w-2 rounded-full bg-success opacity-75'
+              }
+              classList={{
+                'bg-warning': !props.room!.isOnline,
+                'bg-success': props.room!.isOnline,
+              }}
+            />
+            {/* owner avatar */}
+            <img
+              class={'rounded-box border border-primary w-12 h-12'}
+              src={props.room!.owner!.avatarUrl}
+              alt={props.room!.owner!.name}
+            />
+            {/* platform icon */}
+            <img
+              class={
+                'absolute w-5 h-5 bottom-0 right-0 bg-base-200 rounded-full p-1'
+              }
+              src={props.room!.platform!.iconUrl}
+              alt={props.room!.platform!.name}
+            />
+          </div>
+          <div>
+            <div class={'font-bold text-lg'}>{props.room!.title}</div>
+            <div class={'text-md'}>{props.room!.owner!.name}</div>
           </div>
         </div>
-      </Show>
-    </div>
+      </div>
+    </Show>
   )
 }
 
 const Empty: Component = () => {
   return (
     <div class={'w-full text-center py-8 text-neutral-content'}>
-      <span class={'iconify ph--empty align-middle'}></span>
+      <span class={'iconify ph--empty align-middle'} />
       <span class={'ml-2'}>空空如也</span>
     </div>
   )
@@ -202,7 +221,7 @@ const Empty: Component = () => {
 const Loading: Component = () => {
   return (
     <div class={'w-full text-center py-8 text-neutral-content'}>
-      <span class="loading loading-bars loading-md"></span>
+      <span class="loading loading-bars loading-md" />
     </div>
   )
 }
