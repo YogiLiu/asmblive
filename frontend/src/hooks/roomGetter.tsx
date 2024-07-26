@@ -148,18 +148,22 @@ const Result: Component<{
           >
             <div class={'relative'}>
               {/* 直播状态 */}
-              <Show when={props.room!.isOnline}>
-                <span
-                  class={
-                    'animate-ping absolute top-0 right-0 h-2 w-2 rounded-full bg-success opacity-75'
-                  }
-                ></span>
-                <span
-                  class={
-                    'absolute top-0 right-0 h-2 w-2 rounded-full bg-success'
-                  }
-                ></span>
-              </Show>
+              <span
+                class={'absolute top-0 right-0 h-2 w-2 rounded-full'}
+                classList={{
+                  'bg-warning': !props.room!.isOnline,
+                  'bg-success': props.room!.isOnline,
+                }}
+              ></span>
+              <span
+                class={
+                  'animate-ping absolute top-0 right-0 h-2 w-2 rounded-full bg-success opacity-75'
+                }
+                classList={{
+                  'bg-warning': !props.room!.isOnline,
+                  'bg-success': props.room!.isOnline,
+                }}
+              ></span>
               {/* 主播头像 */}
               <img
                 class={'rounded-box border border-primary w-12 h-12'}
