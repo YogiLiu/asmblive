@@ -36,7 +36,7 @@ const RoomList: Component = () => {
     setRooms((rooms) => rooms.filter((r) => r.id !== room.id))
   return (
     <div class={'p-1 absolute top-0 left-0'}>
-      <div class={'p-1'}>
+      <div class={'p-1'} title={'返回'}>
         <A href={'/'} onClick={setShow} class={'btn btn-secondary-content'}>
           <span class={'iconify ph--arrow-bend-up-left'}> </span>
         </A>
@@ -50,7 +50,11 @@ const RoomList: Component = () => {
         >
           <For each={rooms()}>
             {(room) => (
-              <button disabled={!room.isOnline} class={'p-1'}>
+              <button
+                disabled={!room.isOnline}
+                class={'p-1'}
+                title={room.owner!.name}
+              >
                 <RoomBtn room={room} onDelete={deleteHandler} />
               </button>
             )}
@@ -58,7 +62,7 @@ const RoomList: Component = () => {
         </div>
         <span class={'px-1 divider my-0'} />
       </Show>
-      <div class={'p-1'}>
+      <div class={'p-1'} title={'添加直播'}>
         <button onClick={setShow} class={'btn btn-secondary-content'}>
           <span class={'iconify ph--plus-bold'}> </span>
         </button>
