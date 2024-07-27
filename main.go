@@ -36,6 +36,9 @@ func main() {
 			srv,
 		},
 		Logger: logger{log: log.With("module", "wails")},
+		DragAndDrop: &options.DragAndDrop{
+			DisableWebViewDrop: true,
+		},
 	})
 
 	if err != nil {
