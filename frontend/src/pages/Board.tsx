@@ -24,8 +24,52 @@ const Board: Component = () => {
 
 export default Board
 
-const minTimeout = 10000
-const maxTimeout = 60000
+const RoomList: Component = () => {
+  const [rooms, setRooms] = createSignal<service.RoomDto[]>([])
+  const [roomGetter, setShow] = useRoomGetter((room) => {
+    const ids = rooms().map((r) => r.id)
+    if (!ids.includes(room.id)) {
+      setRooms((rooms) => [...rooms, room])
+    }
+  })
+  const deleteHandler = (room: service.RoomDto) =>
+    setRooms((rooms) => rooms.filter((r) => r.id !== room.id))
+  return (
+    <div class={'p-1 absolute top-0 left-0'}>
+      <div class={'p-1'}>
+        <A href={'/'} onClick={setShow} class={'btn btn-secondary-content'}>
+          <span class={'iconify ph--arrow-bend-up-left'}> </span>
+        </A>
+      </div>
+      <span class={'px-1 divider my-0'} />
+      <Show when={rooms().length}>
+        <div
+          class={
+            'max-h-[calc(100vh-152px)] overflow-y-scroll flex flex-col gap-2'
+          }
+        >
+          <For each={rooms()}>
+            {(room) => (
+              <button disabled={!room.isOnline} class={'p-1'}>
+                <RoomBtn room={room} onDelete={deleteHandler} />
+              </button>
+            )}
+          </For>
+        </div>
+        <span class={'px-1 divider my-0'} />
+      </Show>
+      <div class={'p-1'}>
+        <button onClick={setShow} class={'btn btn-secondary-content'}>
+          <span class={'iconify ph--plus-bold'}> </span>
+        </button>
+      </div>
+      {roomGetter}
+    </div>
+  )
+}
+
+const minTimeout = 30000 // 30 seconds
+const maxTimeout = 60000 // 60 seconds
 
 function getRandomRefetchTimeout(): number {
   return Math.floor(Math.random() * (maxTimeout - minTimeout + 1)) + minTimeout
@@ -92,49 +136,5 @@ const RoomBtn: Component<{
         </div>
       </div>
     </Show>
-  )
-}
-
-const RoomList: Component = () => {
-  const [rooms, setRooms] = createSignal<service.RoomDto[]>([])
-  const [roomGetter, setShow] = useRoomGetter((room) => {
-    const ids = rooms().map((r) => r.id)
-    if (!ids.includes(room.id)) {
-      setRooms((rooms) => [...rooms, room])
-    }
-  })
-  const deleteHandler = (room: service.RoomDto) =>
-    setRooms((rooms) => rooms.filter((r) => r.id !== room.id))
-  return (
-    <div class={'p-1 absolute top-0 left-0'}>
-      <div class={'p-1'}>
-        <A href={'/'} onClick={setShow} class={'btn btn-secondary-content'}>
-          <span class={'iconify ph--arrow-bend-up-left'}> </span>
-        </A>
-      </div>
-      <span class={'px-1 divider my-0'} />
-      <Show when={rooms().length}>
-        <div
-          class={
-            'max-h-[calc(100vh-152px)] overflow-y-scroll flex flex-col gap-2'
-          }
-        >
-          <For each={rooms()}>
-            {(room) => (
-              <button disabled={!room.isOnline} class={'p-1'}>
-                <RoomBtn room={room} onDelete={deleteHandler} />
-              </button>
-            )}
-          </For>
-        </div>
-        <span class={'px-1 divider my-0'} />
-      </Show>
-      <div class={'p-1'}>
-        <button onClick={setShow} class={'btn btn-secondary-content'}>
-          <span class={'iconify ph--plus-bold'}> </span>
-        </button>
-      </div>
-      {roomGetter}
-    </div>
   )
 }
