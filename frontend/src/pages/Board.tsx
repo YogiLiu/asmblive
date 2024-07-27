@@ -52,7 +52,7 @@ const RoomList: Component = () => {
             {(room) => (
               <button
                 disabled={!room.isOnline}
-                class={'p-1'}
+                class={'p-1 cursor-pointer'}
                 title={room.owner!.name}
               >
                 <RoomBtn room={room} onDelete={deleteHandler} />
