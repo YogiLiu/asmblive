@@ -7,7 +7,7 @@ type Props = {
 
 const Owner: Component<Props> = (props) => {
   return (
-    <div class={'relative'}>
+    <div class={'relative w-fit h-fit'}>
       {/* online status */}
       <span
         class={'absolute top-0 right-0 h-2 w-2 rounded-full'}
@@ -33,7 +33,7 @@ const Owner: Component<Props> = (props) => {
       />
       {/* platform icon */}
       <img
-        class={'absolute w-5 h-5 bottom-0 right-0 bg-base-200 rounded-full p-1'}
+        class={'absolute w-5 h-5 bottom-0 right-0 bg-base-100 rounded-full p-1'}
         src={props.room.platform!.iconUrl}
         alt={props.room.platform!.name}
       />
