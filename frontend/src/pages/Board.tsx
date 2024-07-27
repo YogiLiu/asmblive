@@ -63,7 +63,7 @@ const RoomList: Component = () => {
         <span class={'px-1 divider my-0'} />
       </Show>
       <div class={'p-1'} title={'添加直播'}>
-        <button onClick={setShow} class={'btn'}>
+        <button onClick={setShow} class={'btn outline-none'}>
           <span class={'iconify ph--plus-bold'}> </span>
         </button>
       </div>
