@@ -37,7 +37,7 @@ const RoomList: Component = () => {
   return (
     <div class={'p-1 absolute top-0 left-0'}>
       <div class={'p-1'} title={'返回'}>
-        <A href={'/'} class={'btn btn-secondary-content'}>
+        <A href={'/'} class={'btn'}>
           <span class={'iconify ph--arrow-bend-up-left'}> </span>
         </A>
       </div>
@@ -63,7 +63,7 @@ const RoomList: Component = () => {
         <span class={'px-1 divider my-0'} />
       </Show>
       <div class={'p-1'} title={'添加直播'}>
-        <button onClick={setShow} class={'btn btn-secondary-content'}>
+        <button onClick={setShow} class={'btn'}>
           <span class={'iconify ph--plus-bold'}> </span>
         </button>
       </div>
