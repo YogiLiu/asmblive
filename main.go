@@ -42,6 +42,6 @@ func main() {
 	})
 
 	if err != nil {
-		println("Error:", err.Error())
+		log.Error("Error running app", "err", err)
 	}
 }
