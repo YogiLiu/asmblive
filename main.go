@@ -19,7 +19,7 @@ func main() {
 	log := slog.New(hdl)
 
 	// Create an instance of the app structure
-	srv, st, sd := service.New(log)
+	pfSrv, pfSu, pfSd := service.NewPlatformService(log)
 
 	// Create application with options
 	err := wails.Run(&options.App{
@@ -30,10 +30,10 @@ func main() {
 			Assets: assets,
 		},
 		BackgroundColour: options.NewRGB(255, 255, 255),
-		OnStartup:        st,
-		OnShutdown:       sd,
+		OnStartup:        pfSu,
+		OnShutdown:       pfSd,
 		Bind: []interface{}{
-			srv,
+			pfSrv,
 		},
 		Logger: logger{log: log.With("module", "wails")},
 		DragAndDrop: &options.DragAndDrop{

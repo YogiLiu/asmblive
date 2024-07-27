@@ -19,7 +19,7 @@ type Service struct {
 	pm  map[string]platform.Platform
 }
 
-func New(log *slog.Logger) (*Service, StartupFunc, ShutdownFunc) {
+func NewPlatformService(log *slog.Logger) (*Service, StartupFunc, ShutdownFunc) {
 	log = log.With("module", "service")
 	srv := server.New(log)
 	c := platform.NewClient(log, platform.Headers{})
