@@ -10,7 +10,8 @@ import {
 } from 'solid-js'
 import { Portal } from 'solid-js/web'
 import { cache, createAsync } from '@solidjs/router'
-import backend from '../backend'
+import Owner from '../components/Owner'
+import { GetPlatforms, GetRoom } from 'wails/go/service/Service'
 
 type OnSelect = (room: service.RoomDto) => void
 
@@ -30,11 +31,7 @@ export const useRoomGetter = (
   ]
 }
 
-const cachedGetRoom = cache(
-  (pid: string, rid: string): Promise<service.RoomDto | null> =>
-    backend.GetRoom(pid, rid),
-  'GetRoom',
-)
+const cachedGetRoom = cache(GetRoom, 'GetRoom')
 
 const RoomSelector: Component<{
   onSelect: (room: service.RoomDto | null) => void
@@ -82,7 +79,7 @@ const RoomSelector: Component<{
 const Form: Component<{ onSubmit: (args: [string, string]) => void }> = (
   props,
 ) => {
-  const platforms = createAsync(backend.GetPlatforms, { initialValue: [] })
+  const platforms = createAsync(GetPlatforms, { initialValue: [] })
   const submitHandler: JSX.EventHandler<HTMLFormElement, SubmitEvent> = (
     event,
   ) => {
@@ -168,39 +165,7 @@ const Result: Component<{
             'absolute left-0 bottom-0 w-full p-2 bg-secondary-content bg-opacity-85 flex gap-2'
           }
         >
-          <div class={'relative'}>
-            {/* online status */}
-            <span
-              class={'absolute top-0 right-0 h-2 w-2 rounded-full'}
-              classList={{
-                'bg-warning': !props.room!.isOnline,
-                'bg-success': props.room!.isOnline,
-              }}
-            />
-            <span
-              class={
-                'animate-ping absolute top-0 right-0 h-2 w-2 rounded-full bg-success opacity-75'
-              }
-              classList={{
-                'bg-warning': !props.room!.isOnline,
-                'bg-success': props.room!.isOnline,
-              }}
-            />
-            {/* owner avatar */}
-            <img
-              class={'rounded-box border border-primary w-12 h-12'}
-              src={props.room!.owner!.avatarUrl}
-              alt={props.room!.owner!.name}
-            />
-            {/* platform icon */}
-            <img
-              class={
-                'absolute w-5 h-5 bottom-0 right-0 bg-base-200 rounded-full p-1'
-              }
-              src={props.room!.platform!.iconUrl}
-              alt={props.room!.platform!.name}
-            />
-          </div>
+          <Owner room={props.room!} />
           <div>
             <div class={'font-bold text-lg'}>{props.room!.title}</div>
             <div class={'text-md'}>{props.room!.owner!.name}</div>
