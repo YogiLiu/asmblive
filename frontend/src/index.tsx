@@ -3,9 +3,9 @@ import { render } from 'solid-js/web'
 
 import './index.css'
 import App from './App'
-import { MemoryRouter } from '@solidjs/router'
+import { HashRouter } from '@solidjs/router'
 import routes from './routes'
 
 const root = document.getElementById('root')
 
-render(() => <MemoryRouter root={App}>{routes}</MemoryRouter>, root!)
+render(() => <HashRouter root={App}>{routes}</HashRouter>, root!)
