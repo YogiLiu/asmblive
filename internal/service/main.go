@@ -20,7 +20,7 @@ type Service struct {
 }
 
 func New(log *slog.Logger) (*Service, StartupFunc, ShutdownFunc) {
-	log = log.With("module", "platform/service")
+	log = log.With("module", "service")
 	srv := server.New(log)
 	c := platform.NewClient(log, platform.Headers{})
 
