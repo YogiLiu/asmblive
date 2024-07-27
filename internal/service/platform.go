@@ -8,18 +8,13 @@ import (
 	"log/slog"
 )
 
-type (
-	StartupFunc  func(ctx context.Context)
-	ShutdownFunc func(ctx context.Context)
-)
-
-type Service struct {
+type PlatformService struct {
 	log *slog.Logger
 	srv server.Server
 	pm  map[string]platform.Platform
 }
 
-func NewPlatformService(log *slog.Logger) (*Service, StartupFunc, ShutdownFunc) {
+func NewPlatformService(log *slog.Logger) (*PlatformService, StartupFunc, ShutdownFunc) {
 	log = log.With("module", "service")
 	srv := server.New(log)
 	c := platform.NewClient(log, platform.Headers{})
@@ -29,7 +24,7 @@ func NewPlatformService(log *slog.Logger) (*Service, StartupFunc, ShutdownFunc) 
 	bl := bili.NewBili(log, c)
 	pm[bl.Id()] = bl
 
-	s := &Service{
+	s := &PlatformService{
 		log: log,
 		srv: srv,
 		pm:  pm,
@@ -49,7 +44,7 @@ func NewPlatformService(log *slog.Logger) (*Service, StartupFunc, ShutdownFunc) 
 	return s, startup, shutdown
 }
 
-func (s Service) GetPlatforms() []*PlatformDto {
+func (s PlatformService) GetPlatforms() []*PlatformDto {
 	ps := make([]*PlatformDto, 0)
 	for _, p := range s.pm {
 		u := p.IconUrl()
@@ -63,7 +58,7 @@ func (s Service) GetPlatforms() []*PlatformDto {
 	return ps
 }
 
-func (s Service) GetPlatform(platformId string) *PlatformDto {
+func (s PlatformService) GetPlatform(platformId string) *PlatformDto {
 	p, ok := s.pm[platformId]
 	if !ok {
 		return nil
@@ -77,7 +72,7 @@ func (s Service) GetPlatform(platformId string) *PlatformDto {
 	}
 }
 
-func (s Service) GetRoom(platformId string, roomId string) *RoomDto {
+func (s PlatformService) GetRoom(platformId string, roomId string) *RoomDto {
 	p, ok := s.pm[platformId]
 	if !ok {
 		s.log.Warn("cannot find platform", "id", platformId)
@@ -108,7 +103,7 @@ func (s Service) GetRoom(platformId string, roomId string) *RoomDto {
 	}
 }
 
-func (s Service) GetQualities(platformId string, roomId string) []*QualityDto {
+func (s PlatformService) GetQualities(platformId string, roomId string) []*QualityDto {
 	p, ok := s.pm[platformId]
 	if !ok {
 		s.log.Warn("cannot find platform", "id", platformId)
@@ -131,7 +126,7 @@ func (s Service) GetQualities(platformId string, roomId string) []*QualityDto {
 	return r
 }
 
-func (s Service) GetLiveUrls(platformId string, roomId string, qualityId string) []string {
+func (s PlatformService) GetLiveUrls(platformId string, roomId string, qualityId string) []string {
 	p, ok := s.pm[platformId]
 	if !ok {
 		s.log.Warn("cannot find platform", "id", platformId)

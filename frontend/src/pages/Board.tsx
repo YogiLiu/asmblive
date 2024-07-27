@@ -11,7 +11,7 @@ import { useRoomGetter } from '../hooks/roomGetter'
 import { service } from 'wails/go/models'
 import { A } from '@solidjs/router'
 import Owner from '../components/Owner'
-import { GetRoom } from 'wails/go/service/Service'
+import { GetRoom } from 'wails/go/service/PlatformService'
 
 const Board: Component = () => {
   return (

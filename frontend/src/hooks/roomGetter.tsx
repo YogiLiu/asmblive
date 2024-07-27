@@ -11,7 +11,7 @@ import {
 import { Portal } from 'solid-js/web'
 import { cache, createAsync } from '@solidjs/router'
 import Owner from '../components/Owner'
-import { GetPlatforms, GetRoom } from 'wails/go/service/Service'
+import { GetPlatforms, GetRoom } from 'wails/go/service/PlatformService'
 
 type OnSelect = (room: service.RoomDto) => void
 
