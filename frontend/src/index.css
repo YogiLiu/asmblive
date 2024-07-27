@@ -6,9 +6,8 @@
   display: none;
 }
 
-/* disable drag for img, link and selected text */
+/* disable drag for img, link */
 img,
-a,
-::selection {
+a {
   -webkit-user-drag: none;
 }
