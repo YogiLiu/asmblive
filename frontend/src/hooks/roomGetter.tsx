@@ -31,7 +31,10 @@ export const useRoomGetter = (
   ]
 }
 
-const cachedGetRoom = cache(GetRoom, 'GetRoom')
+const cachedGetRoom = cache(
+  (pid: string, rid: string) => GetRoom(pid, rid),
+  'GetRoom',
+)
 
 const RoomSelector: Component<{
   onSelect: (room: service.RoomDto | null) => void
@@ -45,9 +48,17 @@ const RoomSelector: Component<{
     })
   })
   const [args, setArgs] = createSignal<[string, string]>(['', ''])
-  const room = createAsync(() => cachedGetRoom(...args()), {
-    initialValue: null,
-  })
+  const room = createAsync(
+    () => {
+      if (args().some((a) => !a)) {
+        return Promise.resolve(null)
+      }
+      return cachedGetRoom(...args())
+    },
+    {
+      initialValue: null,
+    },
+  )
   return (
     <Portal>
       <Show when={props.show}>
