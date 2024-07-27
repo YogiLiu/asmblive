@@ -1,6 +1,5 @@
 import {
   Component,
-  createMemo,
   createSignal,
   For,
   JSX,
@@ -32,8 +31,6 @@ function getRandomRefetchTimeout(): number {
   return Math.floor(Math.random() * (maxTimeout - minTimeout + 1)) + minTimeout
 }
 
-const deleteThreshold = 60
-
 const RoomBtn: Component<{
   room: service.RoomDto
   onDelete?: (room: service.RoomDto) => void
@@ -54,16 +51,14 @@ const RoomBtn: Component<{
     onCleanup(() => clearTimeout(timer))
   })
   const [dragStartX, setDragStartX] = createSignal(0)
-  const [currentX, setCurrentX] = createSignal(0)
-  const showDeleteTip = createMemo(
-    () => Math.abs(currentX() - dragStartX()) >= deleteThreshold,
-  )
+  const [isDragging, setIsDragging] = createSignal(false)
   const dragStartHandler: JSX.EventHandler<HTMLDivElement, DragEvent> = (
     event,
   ) => {
     setDragStartX(event.clientX)
-    setCurrentX(event.clientX)
+    setIsDragging(true)
   }
+  const deleteThreshold = 64
   const dragEndHandler: JSX.EventHandler<HTMLDivElement, DragEvent> = (
     event,
   ) => {
@@ -71,9 +66,8 @@ const RoomBtn: Component<{
       props.onDelete?.(props.room)
     }
     setDragStartX(0)
-    setCurrentX(0)
+    setIsDragging(false)
   }
-  // TODO: get real time position during the drag
   return (
     <Show when={room()}>
       <div
@@ -83,15 +77,19 @@ const RoomBtn: Component<{
         onDragEnd={dragEndHandler}
       >
         <Owner room={room()!} />
-        <Show when={showDeleteTip()}>
+        <div class={'absolute top-0 right-0 w-full h-full overflow-hidden'}>
           <div
             class={
-              'absolute top-0 left-0 w-full h-full bg-base-300 bg-opacity-70 flex justify-center items-center rounded-box'
+              'w-full h-full bg-base-300 bg-opacity-70 flex justify-center items-center rounded-box transition-all'
             }
+            classList={{
+              '-translate-x-full': !isDragging(),
+              'translate-x-0': isDragging(),
+            }}
           >
             <span class={'iconify ph--trash-bold text-xl text-error'} />
           </div>
-        </Show>
+        </div>
       </div>
     </Show>
   )
