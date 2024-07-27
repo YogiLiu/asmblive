@@ -10,7 +10,7 @@ import {
 } from 'solid-js'
 import { Portal } from 'solid-js/web'
 import { cache, createAsync } from '@solidjs/router'
-import { GetPlatforms, GetRoom } from 'wails/go/service/Service'
+import backend from '../backend'
 
 type OnSelect = (room: service.RoomDto) => void
 
@@ -32,7 +32,7 @@ export const useRoomGetter = (
 
 const cachedGetRoom = cache(
   (pid: string, rid: string): Promise<service.RoomDto | null> =>
-    GetRoom(pid, rid),
+    backend.GetRoom(pid, rid),
   'GetRoom',
 )
 
@@ -82,7 +82,7 @@ const RoomSelector: Component<{
 const Form: Component<{ onSubmit: (args: [string, string]) => void }> = (
   props,
 ) => {
-  const platforms = createAsync(GetPlatforms, { initialValue: [] })
+  const platforms = createAsync(backend.GetPlatforms, { initialValue: [] })
   const submitHandler: JSX.EventHandler<HTMLFormElement, SubmitEvent> = (
     event,
   ) => {
