@@ -37,7 +37,7 @@ const RoomList: Component = () => {
   return (
     <div class={'p-1 absolute top-0 left-0'}>
       <div class={'p-1'} title={'返回'}>
-        <A href={'/'} onClick={setShow} class={'btn btn-secondary-content'}>
+        <A href={'/'} class={'btn btn-secondary-content'}>
           <span class={'iconify ph--arrow-bend-up-left'}> </span>
         </A>
       </div>
