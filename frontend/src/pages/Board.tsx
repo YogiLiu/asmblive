@@ -65,7 +65,7 @@ const RoomList: Component = () => {
     }
   })
   return (
-    <div class={'p-2 absolute top-0 left-0'}>
+    <div class={'p-1 absolute top-0 left-0'}>
       <div class={'p-1'}>
         <A href={'/'} onClick={setShow} class={'btn btn-secondary-content'}>
           <span class={'iconify ph--arrow-bend-up-left'}> </span>
@@ -75,7 +75,7 @@ const RoomList: Component = () => {
       <Show when={rooms().length}>
         <div
           class={
-            'max-h-[calc(100vh-160px)] overflow-y-scroll flex flex-col gap-2'
+            'max-h-[calc(100vh-152px)] overflow-y-scroll flex flex-col gap-2'
           }
         >
           <For each={rooms()}>
