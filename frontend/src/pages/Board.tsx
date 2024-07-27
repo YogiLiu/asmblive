@@ -71,7 +71,7 @@ const RoomList: Component = () => {
           <span class={'iconify ph--arrow-bend-up-left'}> </span>
         </A>
       </div>
-      <span class={'divider my-0'} />
+      <span class={'px-1 divider my-0'} />
       <Show when={rooms().length}>
         <div
           class={
@@ -86,7 +86,7 @@ const RoomList: Component = () => {
             )}
           </For>
         </div>
-        <span class={'divider my-0'} />
+        <span class={'px-1 divider my-0'} />
       </Show>
       <div class={'p-1'}>
         <button onClick={setShow} class={'btn btn-secondary-content'}>
