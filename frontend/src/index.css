@@ -5,3 +5,10 @@
 ::-webkit-scrollbar {
   display: none;
 }
+
+/* disable drag for img, link and selected text */
+img,
+a,
+::selection {
+  -webkit-user-drag: none;
+}

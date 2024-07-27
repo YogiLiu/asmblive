@@ -1,7 +1,9 @@
 import {
   Component,
+  createMemo,
   createSignal,
   For,
+  JSX,
   onCleanup,
   onMount,
   Show,
@@ -30,7 +32,12 @@ function getRandomRefetchTimeout(): number {
   return Math.floor(Math.random() * (maxTimeout - minTimeout + 1)) + minTimeout
 }
 
-const RoomBtn: Component<{ room: service.RoomDto }> = (props) => {
+const deleteThreshold = 60
+
+const RoomBtn: Component<{
+  room: service.RoomDto
+  onDelete?: (room: service.RoomDto) => void
+}> = (props) => {
   const [room, setRoom] = createSignal<service.RoomDto>()
   onMount(() => {
     setRoom(props.room)
@@ -38,20 +45,54 @@ const RoomBtn: Component<{ room: service.RoomDto }> = (props) => {
     function refetch() {
       // @ts-expect-error TS2322
       timer = setTimeout(refetch, getRandomRefetchTimeout())
-      GetRoom(props.room.platform!.id, props.room.id)
-        .then((r) => {
-          console.log(r)
-          return r
-        })
-        .then((r) => r && setRoom(r))
+      GetRoom(props.room.platform!.id, props.room.id).then(
+        (r) => r && setRoom(r),
+      )
     }
     // @ts-expect-error TS2322
     timer = setTimeout(refetch, getRandomRefetchTimeout())
     onCleanup(() => clearTimeout(timer))
   })
+  const [dragStartX, setDragStartX] = createSignal(0)
+  const [currentX, setCurrentX] = createSignal(0)
+  const showDeleteTip = createMemo(
+    () => Math.abs(currentX() - dragStartX()) >= deleteThreshold,
+  )
+  const dragStartHandler: JSX.EventHandler<HTMLDivElement, DragEvent> = (
+    event,
+  ) => {
+    setDragStartX(event.clientX)
+    setCurrentX(event.clientX)
+  }
+  const dragEndHandler: JSX.EventHandler<HTMLDivElement, DragEvent> = (
+    event,
+  ) => {
+    if (Math.abs(event.clientX - dragStartX()) >= deleteThreshold) {
+      props.onDelete?.(props.room)
+    }
+    setDragStartX(0)
+    setCurrentX(0)
+  }
+  // TODO: get real time position during the drag
   return (
     <Show when={room()}>
-      <Owner room={room()!} />
+      <div
+        class={'relative'}
+        draggable={true}
+        onDragStart={dragStartHandler}
+        onDragEnd={dragEndHandler}
+      >
+        <Owner room={room()!} />
+        <Show when={showDeleteTip()}>
+          <div
+            class={
+              'absolute top-0 left-0 w-full h-full bg-base-300 bg-opacity-70 flex justify-center items-center rounded-box'
+            }
+          >
+            <span class={'iconify ph--trash-bold text-xl text-error'} />
+          </div>
+        </Show>
+      </div>
     </Show>
   )
 }
@@ -64,6 +105,8 @@ const RoomList: Component = () => {
       setRooms((rooms) => [...rooms, room])
     }
   })
+  const deleteHandler = (room: service.RoomDto) =>
+    setRooms((rooms) => rooms.filter((r) => r.id !== room.id))
   return (
     <div class={'p-1 absolute top-0 left-0'}>
       <div class={'p-1'}>
@@ -81,7 +124,7 @@ const RoomList: Component = () => {
           <For each={rooms()}>
             {(room) => (
               <button disabled={!room.isOnline} class={'p-1'}>
-                <RoomBtn room={room} />
+                <RoomBtn room={room} onDelete={deleteHandler} />
               </button>
             )}
           </For>
