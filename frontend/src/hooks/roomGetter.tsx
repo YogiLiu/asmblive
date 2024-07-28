@@ -166,11 +166,13 @@ const Result: Component<{
           'mt-4 rounded-box overflow-hidden relative hover:outline outline-accent outline-offset-2 cursor-pointer'
         }
       >
-        <img
-          class={'w-full aspect-h-9'}
-          src={props.room!.coverUrl}
-          alt={props.room!.title}
-        />
+        <div class={'w-full aspect-w-16 aspect-h-9'}>
+          <img
+            class={'w-full h-full'}
+            src={props.room!.coverUrl}
+            alt={props.room!.title}
+          />
+        </div>
         <div
           class={
             'absolute left-0 bottom-0 w-full p-2 bg-secondary-content bg-opacity-85 flex gap-2'
