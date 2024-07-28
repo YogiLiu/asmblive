@@ -7,12 +7,12 @@ type PlatformDto struct {
 }
 
 type RoomDto struct {
-	Id       string       `json:"id"`
-	Title    string       `json:"title"`
-	Owner    *OwnerDto    `json:"owner"`
-	IsOnline bool         `json:"isOnline"`
-	CoverUrl string       `json:"coverUrl"`
-	Platform *PlatformDto `json:"platform"`
+	Id       string      `json:"id"`
+	Title    string      `json:"title"`
+	Owner    OwnerDto    `json:"owner"`
+	IsOnline bool        `json:"isOnline"`
+	CoverUrl string      `json:"coverUrl"`
+	Platform PlatformDto `json:"platform"`
 }
 
 type OwnerDto struct {

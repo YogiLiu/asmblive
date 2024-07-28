@@ -28,14 +28,14 @@ const Owner: Component<Props> = (props) => {
       {/* owner avatar */}
       <img
         class={'rounded-box border border-primary w-12 h-12'}
-        src={props.room.owner!.avatarUrl}
-        alt={props.room.owner!.name}
+        src={props.room.owner.avatarUrl}
+        alt={props.room.owner.name}
       />
       {/* platform icon */}
       <img
         class={'absolute w-5 h-5 bottom-0 right-0 bg-base-100 rounded-full p-1'}
-        src={props.room.platform!.iconUrl}
-        alt={props.room.platform!.name}
+        src={props.room.platform.iconUrl}
+        alt={props.room.platform.name}
       />
     </div>
   )

@@ -179,7 +179,7 @@ const Result: Component<{
           <Owner room={props.room!} />
           <div>
             <div class={'font-bold text-lg'}>{props.room!.title}</div>
-            <div class={'text-md'}>{props.room!.owner!.name}</div>
+            <div class={'text-md'}>{props.room!.owner.name}</div>
           </div>
         </div>
       </div>

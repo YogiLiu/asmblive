@@ -200,14 +200,14 @@ func TestService_GetRoom(t *testing.T) {
 			want: &RoomDto{
 				Id:    "testRoom",
 				Title: "testRoomTitle",
-				Owner: &OwnerDto{
+				Owner: OwnerDto{
 					Id:        "testOwner",
 					Name:      "testOwnerName",
 					AvatarUrl: "https://test.com/avatar.png",
 				},
 				IsOnline: true,
 				CoverUrl: "https://test.com/cover.png",
-				Platform: &PlatformDto{
+				Platform: PlatformDto{
 					Id:      "testPlatform",
 					Name:    "testPlatformName",
 					IconUrl: "https://test.com/favicon.ico",

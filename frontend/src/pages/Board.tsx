@@ -53,7 +53,7 @@ const RoomList: Component = () => {
               <button
                 disabled={!room.isOnline}
                 class={'p-1 cursor-pointer'}
-                title={room.owner!.name}
+                title={room.owner.name}
               >
                 <RoomBtn room={room} onDelete={deleteHandler} />
               </button>
@@ -90,7 +90,7 @@ const RoomBtn: Component<{
     function refetch() {
       // @ts-expect-error TS2322
       timer = setTimeout(refetch, getRandomRefetchTimeout())
-      GetRoom(props.room.platform!.id, props.room.id).then(
+      GetRoom(props.room.platform.id, props.room.id).then(
         (r) => r && setRoom(r),
       )
     }

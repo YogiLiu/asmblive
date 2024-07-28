@@ -88,14 +88,14 @@ func (s PlatformService) GetRoom(platformId string, roomId string) *RoomDto {
 	return &RoomDto{
 		Id:    r.Id,
 		Title: r.Title,
-		Owner: &OwnerDto{
+		Owner: OwnerDto{
 			Id:        r.Owner.Id,
 			Name:      r.Owner.Name,
 			AvatarUrl: r.Owner.AvatarUrl.String(),
 		},
 		IsOnline: r.IsOnline,
 		CoverUrl: r.CoverUrl.String(),
-		Platform: &PlatformDto{
+		Platform: PlatformDto{
 			Id:      p.Id(),
 			Name:    p.Name(),
 			IconUrl: piu.String(),
