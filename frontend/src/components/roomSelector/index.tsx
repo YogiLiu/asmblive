@@ -12,7 +12,7 @@ const cachedGetRoom = cache(
   'GetRoom',
 )
 
-const Selector: Component<{
+const RoomSelector: Component<{
   onSelect: (room: service.RoomDto | null) => void
   show: boolean
 }> = (props) => {
@@ -63,4 +63,4 @@ const Selector: Component<{
   )
 }
 
-export default Selector
+export default RoomSelector

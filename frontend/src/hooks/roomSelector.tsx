@@ -1,10 +1,10 @@
 import { service } from 'wails/go/models'
 import { createSignal, JSX } from 'solid-js'
-import Selector from '../components/roomGetter/Selector'
+import RoomSelector from '../components/roomSelector'
 
 type OnSelect = (room: service.RoomDto) => void
 
-export const useRoomGetter = (
+export const useRoomSelector = (
   onSelect: OnSelect,
 ): [JSX.Element, () => void] => {
   const [show, setShow] = createSignal(false)
@@ -15,7 +15,7 @@ export const useRoomGetter = (
     setShow(false)
   }
   return [
-    <Selector onSelect={selectHandler} show={show()} />,
+    <RoomSelector onSelect={selectHandler} show={show()} />,
     () => setShow(true),
   ]
 }

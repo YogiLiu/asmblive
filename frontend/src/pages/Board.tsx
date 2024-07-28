@@ -7,7 +7,7 @@ import {
   onMount,
   Show,
 } from 'solid-js'
-import { useRoomGetter } from '../hooks/roomGetter'
+import { useRoomSelector } from '../hooks/roomSelector'
 import { service } from 'wails/go/models'
 import { A } from '@solidjs/router'
 import Owner from '../components/Owner'
@@ -26,7 +26,7 @@ export default Board
 
 const RoomList: Component = () => {
   const [rooms, setRooms] = createSignal<service.RoomDto[]>([])
-  const [roomGetter, setShow] = useRoomGetter((room) => {
+  const [roomGetter, setShow] = useRoomSelector((room) => {
     const ids = rooms().map((r) => r.id)
     if (!ids.includes(room.id)) {
       setRooms((rooms) => [...rooms, room])
