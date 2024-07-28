@@ -10,7 +10,12 @@ import (
 
 // Store used to store data in a file. The generic type T is the type of data to be stored,
 // and it must be a struct with json tag.
-type Store[T any] struct {
+type Store[T any] interface {
+	Read() (T, error)
+	Write(T) error
+}
+
+type store[T any] struct {
 	name string
 	file string
 
@@ -18,7 +23,7 @@ type Store[T any] struct {
 }
 
 // New creates a new store. Notice: the name must be unique.
-func New[T any](name string) *Store[T] {
+func New[T any](name string) Store[T] {
 	dir := getStoreDir()
 	file := filepath.Join(dir, name+".json")
 	if _, err := os.Stat(file); os.IsNotExist(err) {
@@ -26,13 +31,13 @@ func New[T any](name string) *Store[T] {
 			panic(fmt.Errorf("failed to create store file: %s, err: %w", file, err))
 		}
 	}
-	return &Store[T]{
+	return &store[T]{
 		name: name,
 		file: file,
 	}
 }
 
-func (s *Store[T]) Read() (T, error) {
+func (s *store[T]) Read() (T, error) {
 	s.mtx.RLock()
 	defer s.mtx.RUnlock()
 	var c T
@@ -46,7 +51,7 @@ func (s *Store[T]) Read() (T, error) {
 	return c, nil
 }
 
-func (s *Store[T]) Write(c T) error {
+func (s *store[T]) Write(c T) error {
 	s.mtx.Lock()
 	defer s.mtx.Unlock()
 	data, err := json.Marshal(c)

@@ -6,7 +6,6 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
-	"strings"
 	"testing"
 )
 
@@ -35,11 +34,8 @@ func TestNew(t *testing.T) {
 		_ = os.RemoveAll(dir)
 	}()
 	t.Run("should create the store file", func(t *testing.T) {
-		s := New[mockConfig]("test")
-		assert.Equal(t, dir, s.file[:len(dir)])
-		assert.True(t, strings.HasSuffix(s.file, "test.json"))
-
-		f, err := os.Stat(s.file)
+		_ = New[mockConfig]("test")
+		f, err := os.Stat(filepath.Join(getStoreDir(), "test.json"))
 		assert.NoError(t, err)
 		assert.True(t, f.Mode().IsRegular())
 	})
@@ -69,7 +65,7 @@ func TestStore_Read(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			s := New[mockConfig]("test")
-			err := os.WriteFile(s.file, tt.fileContent, 0600)
+			err := os.WriteFile(filepath.Join(getStoreDir(), "test.json"), tt.fileContent, 0600)
 			assert.NoError(t, err)
 			got, err := s.Read()
 			if tt.wantErr != "" {
@@ -110,7 +106,7 @@ func TestStore_Write(t *testing.T) {
 				return
 			}
 			assert.NoError(t, err)
-			data, err := os.ReadFile(s.file)
+			data, err := os.ReadFile(filepath.Join(getStoreDir(), "test.json"))
 			assert.NoError(t, err)
 			exp, _ := json.Marshal(tt.args.c)
 			assert.Equal(t, exp, data)
