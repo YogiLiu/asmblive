@@ -47,7 +47,7 @@ const RoomSelector: Component<{
           <div
             onClick={(e) => e.stopPropagation()}
             class={
-              'p-6 rounded-box bg-base-100 w-2/3 max-w-[1024px] mx-auto mt-36'
+              'p-6 rounded-box bg-base-100 w-2/3 max-w-[1024px] min-w-[768px] mx-auto mt-36'
             }
           >
             <Suspense>
