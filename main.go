@@ -18,10 +18,9 @@ func main() {
 	hdl := slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: slog.LevelInfo})
 	log := slog.New(hdl)
 
-	// Create an instance of the app structure
 	pfSrv, pfSu, pfSd := service.NewPlatformService(log)
+	bSrv := service.NewBoardService(log)
 
-	// Create application with options
 	err := wails.Run(&options.App{
 		Title:  "Asmblive",
 		Width:  1024,
@@ -34,6 +33,7 @@ func main() {
 		OnShutdown:       pfSd,
 		Bind: []interface{}{
 			pfSrv,
+			bSrv,
 		},
 		Logger: logger{log: log.With("module", "wails")},
 		DragAndDrop: &options.DragAndDrop{
