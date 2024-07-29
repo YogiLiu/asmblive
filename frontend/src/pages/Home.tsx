@@ -25,7 +25,9 @@ const Home: Component = () => {
       mutate((boards) => boards.filter((item) => item.id !== board.id))
     }
   }
-  const version = createAsync(GetVersion, { initialValue: '' })
+  const version = createAsync(() => GetVersion().then((v) => 'v' + v), {
+    initialValue: '',
+  })
   return (
     <div class={'h-screen overflow-scroll flex flex-col'}>
       <div
@@ -60,7 +62,7 @@ const Home: Component = () => {
           <span class={'iconify ph--plus-bold text-2xl'}> </span>
         </button>
       </div>
-      <div class={'text-center mb-1 text-sm font-light'}>v{version()}</div>
+      <div class={'text-center mb-1 text-sm font-light'}>{version()}</div>
     </div>
   )
 }
