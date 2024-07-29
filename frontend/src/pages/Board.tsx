@@ -1,144 +1,101 @@
-import {
-  Component,
-  createSignal,
-  For,
-  JSX,
-  onCleanup,
-  onMount,
-  Show,
-} from 'solid-js'
-import { useRoomSelector } from '../hooks/roomSelector'
+import { Component, createResource, createSignal, JSX, Show } from 'solid-js'
 import { service } from 'wails/go/models'
-import { A } from '@solidjs/router'
-import Owner from '../components/Owner'
-import { GetRoom } from 'wails/go/service/PlatformService'
+import { useParams } from '@solidjs/router'
+import { GetBoard, UpdateBoard } from 'wails/go/service/BoardService'
+import RoomList from '../components/board/RoomList'
 
 const Board: Component = () => {
-  return (
-    <>
-      <RoomList />
-      <div class={'m-1 ml-20'}>123</div>
-    </>
-  )
-}
-
-export default Board
-
-const RoomList: Component = () => {
-  const [rooms, setRooms] = createSignal<service.RoomDto[]>([])
-  const [roomGetter, setShow] = useRoomSelector((room) => {
-    const ids = rooms().map((r) => r.id)
-    if (!ids.includes(room.id)) {
-      setRooms((rooms) => [...rooms, room])
+  const id = useParams().id
+  const [board, { refetch }] = createResource(() => GetBoard(id))
+  const handleAdd = async (room: service.RoomDto) => {
+    board()!.rooms.forEach((r) => {
+      if (r.id === room.id && r.platformId === room.platform.id) {
+        return
+      }
+    })
+    await UpdateBoard(
+      new service.BoardDTO({
+        ...board()!,
+        rooms: [
+          ...board()!.rooms,
+          new service.BoardRoomDTO({
+            id: room.id,
+            platformId: room.platform.id,
+            avatarUrl: room.owner.avatarUrl,
+          }),
+        ],
+      }),
+    )
+    refetch()
+  }
+  const handleRemove = async (room: service.RoomDto) => {
+    await UpdateBoard(
+      new service.BoardDTO({
+        ...board()!,
+        rooms: board()!.rooms.filter(
+          (r) => r.id !== room.id || r.platformId !== room.platform.id,
+        ),
+      }),
+    )
+    refetch()
+  }
+  const [isEditingName, setIsEditingName] = createSignal(false)
+  const handleSubmit: JSX.EventHandler<HTMLFormElement, SubmitEvent> = async (
+    event,
+  ) => {
+    event.preventDefault()
+    setIsEditingName(false)
+    const data = new FormData(event.currentTarget)
+    const name = data.get('name') as string
+    if (!name || name === board()!.name) {
+      return
     }
-  })
-  const deleteHandler = (room: service.RoomDto) =>
-    setRooms((rooms) => rooms.filter((r) => r.id !== room.id))
+    await UpdateBoard(
+      new service.BoardDTO({
+        ...board()!,
+        name: name,
+      }),
+    )
+    refetch()
+  }
   return (
-    <div class={'p-1 absolute top-0 left-0'}>
-      <div class={'p-1'} title={'返回'}>
-        <A href={'/'} class={'btn'}>
-          <span class={'iconify ph--arrow-bend-up-left'}> </span>
-        </A>
-      </div>
-      <span class={'px-1 divider my-0'} />
-      <Show when={rooms().length}>
-        <div
-          class={
-            'max-h-[calc(100vh-152px)] overflow-y-scroll flex flex-col gap-2'
-          }
+    <Show when={board()}>
+      <RoomList
+        rooms={board()!.rooms}
+        onAdd={handleAdd}
+        onRemove={handleRemove}
+      />
+      <div class={'m-1 ml-20'}>
+        <label
+          class={'font-bold text-xl pt-4 w-fit block'}
+          onClick={() => setIsEditingName(true)}
         >
-          <For each={rooms()}>
-            {(room) => (
-              <button
-                disabled={!room.isOnline}
-                class={'p-1 cursor-pointer'}
-                title={room.owner.name}
-              >
-                <RoomBtn room={room} onDelete={deleteHandler} />
-              </button>
-            )}
-          </For>
-        </div>
-        <span class={'px-1 divider my-0'} />
-      </Show>
-      <div class={'p-1'} title={'添加直播'}>
-        <button onClick={setShow} class={'btn outline-none'}>
-          <span class={'iconify ph--plus-bold'}> </span>
-        </button>
-      </div>
-      {roomGetter}
-    </div>
-  )
-}
-
-const minTimeout = 30000 // 30 seconds
-const maxTimeout = 60000 // 60 seconds
-
-function getRandomRefetchTimeout(): number {
-  return Math.floor(Math.random() * (maxTimeout - minTimeout + 1)) + minTimeout
-}
-
-const RoomBtn: Component<{
-  room: service.RoomDto
-  onDelete?: (room: service.RoomDto) => void
-}> = (props) => {
-  const [room, setRoom] = createSignal<service.RoomDto>()
-  onMount(() => {
-    setRoom(props.room)
-    let timer: number
-    function refetch() {
-      // @ts-expect-error TS2322
-      timer = setTimeout(refetch, getRandomRefetchTimeout())
-      GetRoom(props.room.platform.id, props.room.id).then(
-        (r) => r && setRoom(r),
-      )
-    }
-    // @ts-expect-error TS2322
-    timer = setTimeout(refetch, getRandomRefetchTimeout())
-    onCleanup(() => clearTimeout(timer))
-  })
-  const [dragStartX, setDragStartX] = createSignal(0)
-  const [isDragging, setIsDragging] = createSignal(false)
-  const dragStartHandler: JSX.EventHandler<HTMLDivElement, DragEvent> = (
-    event,
-  ) => {
-    setDragStartX(event.clientX)
-    setIsDragging(true)
-  }
-  const deleteThreshold = 64
-  const dragEndHandler: JSX.EventHandler<HTMLDivElement, DragEvent> = (
-    event,
-  ) => {
-    if (Math.abs(event.clientX - dragStartX()) >= deleteThreshold) {
-      props.onDelete?.(props.room)
-    }
-    setDragStartX(0)
-    setIsDragging(false)
-  }
-  return (
-    <Show when={room()}>
-      <div
-        class={'relative'}
-        draggable={true}
-        onDragStart={dragStartHandler}
-        onDragEnd={dragEndHandler}
-      >
-        <Owner room={room()!} />
-        <div class={'absolute top-0 right-0 w-full h-full overflow-hidden'}>
-          <div
-            class={
-              'w-full h-full bg-base-300 bg-opacity-70 flex justify-center items-center rounded-box transition-all'
-            }
-            classList={{
-              '-translate-x-full': !isDragging(),
-              'translate-x-0': isDragging(),
-            }}
+          <Show
+            when={isEditingName()}
+            fallback={<div class={'h-8 w-fit'}>{board()!.name}</div>}
           >
-            <span class={'iconify ph--trash-bold text-xl text-error'} />
-          </div>
-        </div>
+            <form
+              onSubmit={handleSubmit}
+              class={
+                'outline outline-offset-2 outline-2 px-2 rounded overflow-hidden w-fit flex items-center'
+              }
+            >
+              <input
+                class={'outline-none'}
+                name={'name'}
+                value={board()!.name}
+                minLength={1}
+                maxLength={16}
+                autofocus={true}
+                placeholder={'Board Name'}
+              />
+              <span class={'iconify ph--arrow-elbow-down-left text-neutral '} />
+            </form>
+          </Show>
+        </label>
       </div>
     </Show>
   )
 }
+
+export default Board

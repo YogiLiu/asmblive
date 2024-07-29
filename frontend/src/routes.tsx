@@ -8,7 +8,7 @@ export default [
     component: Home,
   },
   {
-    path: '/board',
+    path: '/boards/:id',
     component: lazy(() => import('./pages/Board')),
   },
 ] satisfies RouteDefinition[]
