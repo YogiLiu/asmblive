@@ -23,12 +23,17 @@ type store[T any] struct {
 }
 
 // New creates a new store. Notice: the name must be unique.
-func New[T any](name string) Store[T] {
+func New[T any](name string, initialValue T) Store[T] {
 	dir := getStoreDir()
 	file := filepath.Join(dir, name+".json")
 	if _, err := os.Stat(file); os.IsNotExist(err) {
 		if _, err := os.Create(file); err != nil {
 			panic(fmt.Errorf("failed to create store file: %s, err: %w", file, err))
+		}
+		if iv, err := json.Marshal(initialValue); err != nil {
+			panic(fmt.Errorf("failed to marshal initial value: %v: %w", initialValue, err))
+		} else {
+			_ = os.WriteFile(file, iv, 0600)
 		}
 	}
 	return &store[T]{

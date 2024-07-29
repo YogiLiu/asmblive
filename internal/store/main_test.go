@@ -34,7 +34,7 @@ func TestNew(t *testing.T) {
 		_ = os.RemoveAll(dir)
 	}()
 	t.Run("should create the store file", func(t *testing.T) {
-		_ = New[mockConfig]("test")
+		_ = New[mockConfig]("test", mockConfig{})
 		f, err := os.Stat(filepath.Join(getStoreDir(), "test.json"))
 		assert.NoError(t, err)
 		assert.True(t, f.Mode().IsRegular())
@@ -64,7 +64,7 @@ func TestStore_Read(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			s := New[mockConfig]("test")
+			s := New[mockConfig]("test", mockConfig{})
 			err := os.WriteFile(filepath.Join(getStoreDir(), "test.json"), tt.fileContent, 0600)
 			assert.NoError(t, err)
 			got, err := s.Read()
@@ -99,7 +99,7 @@ func TestStore_Write(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			s := New[mockConfig]("test")
+			s := New[mockConfig]("test", mockConfig{})
 			err := s.Write(tt.args.c)
 			if tt.wantErr != "" {
 				assert.ErrorContains(t, err, tt.wantErr)
