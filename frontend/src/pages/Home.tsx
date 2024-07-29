@@ -44,7 +44,7 @@ const Home: Component = () => {
                     'absolute hidden top-0 right-0 rounded-full bg-error group-hover:flex justify-center items-center p-1 translate-x-2 -translate-y-2 hover:rotate-90 transition-all outline outline-base-100'
                   }
                 >
-                  <span class={'iconify ph--x-bold text-xs text-zinc-50'} />
+                  <span class={'iconify ph--x-bold text-sm text-zinc-50'} />
                 </button>
               </div>
             )}
