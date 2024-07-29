@@ -15,8 +15,11 @@ import (
 var assets embed.FS
 
 func main() {
+	vs := &version{}
+
 	hdl := slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: slog.LevelInfo})
 	log := slog.New(hdl)
+	log = log.With("version", vs.GetVersion())
 
 	pfSrv, pfSu, pfSd := service.NewPlatformService(log)
 	bSrv := service.NewBoardService(log)
@@ -32,6 +35,7 @@ func main() {
 		OnStartup:        pfSu,
 		OnShutdown:       pfSd,
 		Bind: []interface{}{
+			vs,
 			pfSrv,
 			bSrv,
 		},

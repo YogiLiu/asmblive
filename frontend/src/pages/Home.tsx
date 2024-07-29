@@ -1,8 +1,9 @@
 import { Component, createResource, For, Index, Show } from 'solid-js'
-import { A } from '@solidjs/router'
+import { A, createAsync } from '@solidjs/router'
 import { AddBoard, GetBoards, RemoveBoard } from 'wails/go/service/BoardService'
 import { service } from 'wails/go/models'
 import { nanoid } from 'nanoid'
+import { GetVersion } from 'wails/go/main/version'
 
 const Home: Component = () => {
   const [boards, { refetch, mutate }] = createResource(GetBoards, {
@@ -24,34 +25,42 @@ const Home: Component = () => {
       refetch()
     }
   }
+  const version = createAsync(GetVersion, { initialValue: '' })
   return (
-    <div class={'m-6 *:w-24 *:h-24 flex gap-4 flex-wrap'}>
-      <Show when={boards()}>
-        <For each={boards()}>
-          {(board) => (
-            <div class={'relative group'}>
-              <Board board={board} />
-              <button
-                onClick={() => handleRemove(board)}
-                class={
-                  'absolute hidden top-0 right-0 rounded-full bg-error group-hover:flex justify-center items-center p-1 translate-x-2 -translate-y-2 hover:rotate-90 transition-all outline outline-base-100'
-                }
-              >
-                <span class={'iconify ph--x-bold text-xs text-zinc-50'} />
-              </button>
-            </div>
-          )}
-        </For>
-      </Show>
-      <button
-        onClick={handleAdd}
+    <div class={'h-screen overflow-scroll flex flex-col'}>
+      <div
         class={
-          'flex justify-center items-center hover:outline rounded-box border outline-offset-2 outline-accent'
+          'flex-grow m-6 *:w-24 *:h-24 flex gap-4 flex-wrap justify-around after:flex-auto content-start'
         }
-        title={'添加看板'}
       >
-        <span class={'iconify ph--plus-bold'}> </span>
-      </button>
+        <Show when={boards()}>
+          <For each={boards()}>
+            {(board) => (
+              <div class={'relative group'}>
+                <Board board={board} />
+                <button
+                  onClick={() => handleRemove(board)}
+                  class={
+                    'absolute hidden top-0 right-0 rounded-full bg-error group-hover:flex justify-center items-center p-1 translate-x-2 -translate-y-2 hover:rotate-90 transition-all outline outline-base-100'
+                  }
+                >
+                  <span class={'iconify ph--x-bold text-xs text-zinc-50'} />
+                </button>
+              </div>
+            )}
+          </For>
+        </Show>
+        <button
+          onClick={handleAdd}
+          class={
+            'flex justify-center items-center hover:outline rounded-box border outline-offset-2 outline-accent'
+          }
+          title={'添加看板'}
+        >
+          <span class={'iconify ph--plus-bold'}> </span>
+        </button>
+      </div>
+      <div class={'text-center mb-1 text-sm font-light'}>v{version()}</div>
     </div>
   )
 }

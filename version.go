@@ -8,7 +8,7 @@ import (
 //go:embed .cz.json
 var czStr string
 
-var version string
+var v string
 
 func init() {
 	cz := map[string]any{}
@@ -17,9 +17,12 @@ func init() {
 		panic(err)
 	}
 	c := cz["commitizen"].(map[string]any)
-	version = c["version"].(string)
+	v = c["version"].(string)
 }
 
-func Version() string {
-	return version
+type version struct {
+}
+
+func (vs version) GetVersion() string {
+	return v
 }
