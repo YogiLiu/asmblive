@@ -64,6 +64,13 @@ const Board: Component = () => {
       mutate(newBoard)
     }
   }
+  const handleEscape: JSX.EventHandler<HTMLFormElement, KeyboardEvent> = (
+    event,
+  ) => {
+    if (event.key === 'Escape') {
+      setIsEditingName(false)
+    }
+  }
   return (
     <Show when={board()}>
       <RoomList
@@ -73,18 +80,19 @@ const Board: Component = () => {
       />
       <div class={'m-1 ml-20'}>
         <label
-          class={'font-bold text-xl pt-4 w-fit block'}
+          class={'font-bold text-xl w-fit block my-5'}
           onClick={() => setIsEditingName(true)}
         >
           <Show
             when={isEditingName()}
-            fallback={<div class={'h-8 w-fit'}>{board()!.name}</div>}
+            fallback={<div class={'w-fit'}>{board()!.name}</div>}
           >
             <form
               onSubmit={handleSubmit}
               class={
-                'outline outline-offset-2 outline-2 px-2 rounded overflow-hidden w-fit flex items-center'
+                'outline outline-offset-4 outline-2 rounded overflow-hidden w-fit flex items-center'
               }
+              onKeyPress={handleEscape}
             >
               <input
                 class={'outline-none'}
@@ -99,6 +107,13 @@ const Board: Component = () => {
             </form>
           </Show>
         </label>
+        <div
+          class={
+            'w-full h-[calc(100vh-4.5rem)] overflow-scroll border rounded-box'
+          }
+        >
+          123
+        </div>
       </div>
     </Show>
   )
