@@ -26,7 +26,7 @@ const RoomList: Component<Props> = (props) => {
       <Show when={props.rooms.length}>
         <div
           class={
-            'max-h-[calc(100vh-152px)] overflow-y-scroll flex flex-col gap-2'
+            'max-h-[calc(100vh-9.5rem)] overflow-y-scroll flex flex-col gap-2'
           }
         >
           <For each={props.rooms}>
