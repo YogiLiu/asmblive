@@ -48,6 +48,7 @@ const Home: Component = () => {
         class={
           'flex justify-center items-center hover:outline rounded-box border outline-offset-2 outline-accent'
         }
+        title={'添加看板'}
       >
         <span class={'iconify ph--plus-bold'}> </span>
       </button>
