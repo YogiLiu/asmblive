@@ -6,7 +6,7 @@ import { nanoid } from 'nanoid'
 import { GetVersion } from 'wails/go/main/version'
 
 const Home: Component = () => {
-  const [boards, { refetch, mutate }] = createResource(GetBoards, {
+  const [boards, { mutate }] = createResource(GetBoards, {
     initialValue: [],
   })
   const handleAdd = async () => {
@@ -22,7 +22,7 @@ const Home: Component = () => {
   const handleRemove = async (board: service.BoardDTO) => {
     const b = await RemoveBoard(board.id)
     if (b.id === board.id) {
-      refetch()
+      mutate((boards) => boards.filter((item) => item.id !== board.id))
     }
   }
   const version = createAsync(GetVersion, { initialValue: '' })

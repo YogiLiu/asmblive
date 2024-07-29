@@ -6,14 +6,14 @@ import RoomList from '../components/board/RoomList'
 
 const Board: Component = () => {
   const id = useParams().id
-  const [board, { refetch }] = createResource(() => GetBoard(id))
+  const [board, { mutate }] = createResource(() => GetBoard(id))
   const handleAdd = async (room: service.RoomDto) => {
     board()!.rooms.forEach((r) => {
       if (r.id === room.id && r.platformId === room.platform.id) {
         return
       }
     })
-    await UpdateBoard(
+    const newBoard = await UpdateBoard(
       new service.BoardDTO({
         ...board()!,
         rooms: [
@@ -26,10 +26,12 @@ const Board: Component = () => {
         ],
       }),
     )
-    refetch()
+    if (newBoard.id === board()!.id) {
+      mutate(newBoard)
+    }
   }
   const handleRemove = async (room: service.RoomDto) => {
-    await UpdateBoard(
+    const newBoard = await UpdateBoard(
       new service.BoardDTO({
         ...board()!,
         rooms: board()!.rooms.filter(
@@ -37,7 +39,9 @@ const Board: Component = () => {
         ),
       }),
     )
-    refetch()
+    if (newBoard.id === board()!.id) {
+      mutate(newBoard)
+    }
   }
   const [isEditingName, setIsEditingName] = createSignal(false)
   const handleSubmit: JSX.EventHandler<HTMLFormElement, SubmitEvent> = async (
@@ -50,13 +54,15 @@ const Board: Component = () => {
     if (!name || name === board()!.name) {
       return
     }
-    await UpdateBoard(
+    const newBoard = await UpdateBoard(
       new service.BoardDTO({
         ...board()!,
         name: name,
       }),
     )
-    refetch()
+    if (newBoard.id === board()!.id) {
+      mutate(newBoard)
+    }
   }
   return (
     <Show when={board()}>
