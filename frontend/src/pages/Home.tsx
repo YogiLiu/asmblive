@@ -30,7 +30,7 @@ const Home: Component = () => {
     <div class={'h-screen overflow-scroll flex flex-col'}>
       <div
         class={
-          'flex-grow m-6 *:w-24 *:h-24 flex gap-4 flex-wrap justify-around after:flex-auto content-start'
+          'flex-grow m-6 *:w-24 *:h-24 grid grid-cols-[repeat(auto-fill,minmax(6rem,1fr))] content-start gap-4'
         }
       >
         <Show when={boards()}>
