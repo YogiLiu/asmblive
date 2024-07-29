@@ -57,7 +57,7 @@ const Home: Component = () => {
           }
           title={'添加看板'}
         >
-          <span class={'iconify ph--plus-bold'}> </span>
+          <span class={'iconify ph--plus-bold text-2xl'}> </span>
         </button>
       </div>
       <div class={'text-center mb-1 text-sm font-light'}>v{version()}</div>
