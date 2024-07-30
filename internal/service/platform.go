@@ -15,7 +15,7 @@ type PlatformService struct {
 }
 
 func NewPlatformService(log *slog.Logger, setting *SettingService) (*PlatformService, StartupFunc, ShutdownFunc) {
-	log = log.With("module", "platform_service")
+	log = log.With("module", "service/platform")
 	srv := server.New(log)
 	c := platform.NewClient(log, platform.Headers{})
 
