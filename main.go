@@ -21,7 +21,8 @@ func main() {
 	log := slog.New(hdl)
 	log = log.With("version", vs.GetVersion())
 
-	pfSrv, pfSu, pfSd := service.NewPlatformService(log)
+	sSrv := service.NewSettingService(log)
+	pfSrv, pfSu, pfSd := service.NewPlatformService(log, sSrv)
 	bSrv := service.NewBoardService(log)
 
 	err := wails.Run(&options.App{
@@ -38,6 +39,7 @@ func main() {
 			vs,
 			pfSrv,
 			bSrv,
+			sSrv,
 		},
 		Logger: logger{log: log.With("module", "wails")},
 		DragAndDrop: &options.DragAndDrop{

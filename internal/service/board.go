@@ -11,7 +11,7 @@ type BoardService struct {
 }
 
 func NewBoardService(log *slog.Logger) *BoardService {
-	log = log.With("module", "service")
+	log = log.With("module", "board_service")
 	s := store.New[[]BoardDTO]("boards", make([]BoardDTO, 0))
 	return &BoardService{
 		log: log,

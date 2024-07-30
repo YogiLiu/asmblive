@@ -2,6 +2,7 @@ package bili
 
 import (
 	"asmblive/internal/platform"
+	"asmblive/internal/setting"
 	"context"
 	"fmt"
 	"log/slog"
@@ -15,13 +16,15 @@ import (
 type Bili struct {
 	log *slog.Logger
 	pc  platform.Client
+	st  *setting.Bili
 }
 
-func NewBili(l *slog.Logger, c platform.Client) *Bili {
+func NewBili(l *slog.Logger, c platform.Client, s *setting.Bili) *Bili {
 	l = l.With("module", "platform/bili")
 	return &Bili{
 		log: l,
 		pc:  c,
+		st:  s,
 	}
 }
 
@@ -42,7 +45,7 @@ func (b Bili) IconUrl() url.URL {
 }
 
 func (b Bili) GetRoom(ctx context.Context, roomId string) (platform.Room, error) {
-	bc := biliClient[roomDetail]{b.pc, b.log}
+	bc := biliClient[roomDetail]{b.pc, b.log, b.st}
 	u := url.URL{
 		Scheme: "https",
 		Host:   "api.live.bilibili.com",
@@ -144,7 +147,7 @@ func (b Bili) GetLiveUrls(ctx context.Context, roomId string, qualityId string) 
 }
 
 func (b Bili) getRoomPlayInfo(ctx context.Context, roomId string, qualityId string) (*roomPlayInfo, error) {
-	bc := biliClient[roomPlayInfo]{b.pc, b.log}
+	bc := biliClient[roomPlayInfo]{b.pc, b.log, b.st}
 	u := url.URL{
 		Scheme: "https",
 		Host:   "api.live.bilibili.com",

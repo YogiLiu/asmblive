@@ -2,6 +2,7 @@ package bili
 
 import (
 	"asmblive/internal/platform"
+	"asmblive/internal/setting"
 	"encoding/json"
 	"fmt"
 	"log/slog"
@@ -16,11 +17,19 @@ var commonHeaders = map[string]string{
 type biliClient[T any] struct {
 	platform.Client
 	log *slog.Logger
+	st  *setting.Bili
 }
 
 func (c biliClient[T]) getJson(req *http.Request) (*T, error) {
 	for k, v := range commonHeaders {
 		req.Header.Set(k, v)
+	}
+	if c.st != nil {
+		ck := c.st.GetBiliCookie()
+		if ck != "" {
+			req.Header.Set("Cookie", ck)
+			c.log.Info("use cookie for bilibili", "host", req.URL.Host, "path", req.URL.Path)
+		}
 	}
 	res, err := c.Do(req)
 	if err != nil {

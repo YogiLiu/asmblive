@@ -61,6 +61,15 @@ const Home: Component = () => {
         >
           <span class={'iconify ph--plus-bold text-2xl'}> </span>
         </button>
+        <A
+          href={'/settings'}
+          class={
+            'flex justify-center items-center hover:outline rounded-box border outline-offset-2 outline-accent'
+          }
+          title={'设置'}
+        >
+          <span class={'iconify ph--gear text-2xl'}> </span>
+        </A>
       </div>
       <div class={'text-center mb-1 text-sm font-light'}>{version()}</div>
     </div>

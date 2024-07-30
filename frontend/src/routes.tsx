@@ -11,4 +11,8 @@ export default [
     path: '/boards/:id',
     component: lazy(() => import('./pages/Board')),
   },
+  {
+    path: '/settings',
+    component: lazy(() => import('./pages/Setting')),
+  },
 ] satisfies RouteDefinition[]

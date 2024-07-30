@@ -14,14 +14,14 @@ type PlatformService struct {
 	pm  map[string]platform.Platform
 }
 
-func NewPlatformService(log *slog.Logger) (*PlatformService, StartupFunc, ShutdownFunc) {
-	log = log.With("module", "service")
+func NewPlatformService(log *slog.Logger, setting *SettingService) (*PlatformService, StartupFunc, ShutdownFunc) {
+	log = log.With("module", "platform_service")
 	srv := server.New(log)
 	c := platform.NewClient(log, platform.Headers{})
 
 	pm := make(map[string]platform.Platform)
 	// bilibili
-	bl := bili.NewBili(log, c)
+	bl := bili.NewBili(log, c, &setting.Bili)
 	pm[bl.Id()] = bl
 
 	s := &PlatformService{
