@@ -8,11 +8,11 @@ const Board: Component = () => {
   const id = useParams().id
   const [board, { mutate }] = createResource(() => GetBoard(id))
   const handleAdd = async (room: service.RoomDto) => {
-    board()!.rooms.forEach((r) => {
+    for (const r of board()!.rooms) {
       if (r.id === room.id && r.platformId === room.platform.id) {
         return
       }
-    })
+    }
     const newBoard = await UpdateBoard(
       new service.BoardDTO({
         ...board()!,
