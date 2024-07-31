@@ -1,11 +1,11 @@
 import { Component, createSignal, For, JSX } from 'solid-js'
 import { createAsync } from '@solidjs/router'
-import { GetPlatforms } from 'wails/go/service/PlatformService'
+import { getPlatforms } from '../../service/platform'
 
 const Form: Component<{ onSubmit: (args: [string, string]) => void }> = (
   props,
 ) => {
-  const platforms = createAsync(GetPlatforms, { initialValue: [] })
+  const platforms = createAsync(getPlatforms, { initialValue: [] })
   const submitHandler: JSX.EventHandler<HTMLFormElement, SubmitEvent> = (
     event,
   ) => {

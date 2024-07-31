@@ -5,17 +5,17 @@ import {
   createMemo,
   createSignal,
 } from 'solid-js'
-import { GetBiliCookie, SetBiliCookie } from 'wails/go/service/SettingService'
+import { getBiliCookie, setBiliCookie } from '../../service/settings'
 
 const BiliCookie: Component = () => {
-  const [cookie, { mutate }] = createResource(GetBiliCookie, {
+  const [cookie, { mutate }] = createResource(getBiliCookie, {
     initialValue: '',
   })
   const handleChange: JSX.EventHandler<HTMLInputElement, Event> = async (
     event,
   ) => {
     const value = event.currentTarget.value
-    const c = await SetBiliCookie(value)
+    const c = await setBiliCookie(value)
     mutate(c)
   }
   const [show, setShow] = createSignal(false)

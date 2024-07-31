@@ -1,8 +1,8 @@
 import { Component } from 'solid-js'
-import { service } from 'wails/go/models.ts'
+import { Room } from '../service/types'
 
 type Props = {
-  room: service.RoomDto
+  room: Room
 }
 
 const Owner: Component<Props> = (props) => {

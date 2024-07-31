@@ -1,44 +1,40 @@
 import { Component, createResource, createSignal, JSX, Show } from 'solid-js'
-import { service } from 'wails/go/models'
 import { useParams } from '@solidjs/router'
-import { GetBoard, UpdateBoard } from 'wails/go/service/BoardService'
 import RoomList from '../components/board/RoomList'
+import { getBoard, updateBoard } from '../service/board'
+import { Room } from '../service/types'
 
 const Board: Component = () => {
   const id = useParams().id
-  const [board, { mutate }] = createResource(() => GetBoard(id))
-  const handleAdd = async (room: service.RoomDto) => {
+  const [board, { mutate }] = createResource(() => getBoard(id))
+  const handleAdd = async (room: Room) => {
     for (const r of board()!.rooms) {
       if (r.id === room.id && r.platformId === room.platform.id) {
         return
       }
     }
-    const newBoard = await UpdateBoard(
-      new service.BoardDTO({
-        ...board()!,
-        rooms: [
-          ...board()!.rooms,
-          new service.BoardRoomDTO({
-            id: room.id,
-            platformId: room.platform.id,
-            avatarUrl: room.owner.avatarUrl,
-          }),
-        ],
-      }),
-    )
+    const newBoard = await updateBoard({
+      ...board()!,
+      rooms: [
+        ...board()!.rooms,
+        {
+          id: room.id,
+          platformId: room.platform.id,
+          avatarUrl: room.owner.avatarUrl,
+        },
+      ],
+    })
     if (newBoard.id === board()!.id) {
       mutate(newBoard)
     }
   }
-  const handleRemove = async (room: service.RoomDto) => {
-    const newBoard = await UpdateBoard(
-      new service.BoardDTO({
-        ...board()!,
-        rooms: board()!.rooms.filter(
-          (r) => r.id !== room.id || r.platformId !== room.platform.id,
-        ),
-      }),
-    )
+  const handleRemove = async (room: Room) => {
+    const newBoard = await updateBoard({
+      ...board()!,
+      rooms: board()!.rooms.filter(
+        (r) => r.id !== room.id || r.platformId !== room.platform.id,
+      ),
+    })
     if (newBoard.id === board()!.id) {
       mutate(newBoard)
     }
@@ -54,12 +50,10 @@ const Board: Component = () => {
     if (!name || name === board()!.name) {
       return
     }
-    const newBoard = await UpdateBoard(
-      new service.BoardDTO({
-        ...board()!,
-        name: name,
-      }),
-    )
+    const newBoard = await updateBoard({
+      ...board()!,
+      name: name,
+    })
     if (newBoard.id === board()!.id) {
       mutate(newBoard)
     }

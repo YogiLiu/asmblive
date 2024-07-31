@@ -1,20 +1,20 @@
-import { service } from 'wails/go/models'
 import { Component, For, Show } from 'solid-js'
 import { useRoomSelector } from '../../hooks/roomSelector'
 import { A } from '@solidjs/router'
 import RoomBtn from './RoomBtn'
+import { BoardRoom, Room } from '../../service/types'
 
 type Props = {
-  rooms: service.BoardRoomDTO[]
-  onAdd: (room: service.RoomDto) => void
-  onRemove: (room: service.RoomDto) => void
+  rooms: BoardRoom[]
+  onAdd: (room: Room) => void
+  onRemove: (room: Room) => void
 }
 
 const RoomList: Component<Props> = (props) => {
   const [roomGetter, setShow] = useRoomSelector((room) => {
     props.onAdd(room)
   })
-  const deleteHandler = (room: service.RoomDto) => props.onRemove(room)
+  const deleteHandler = (room: Room) => props.onRemove(room)
   return (
     <div class={'p-1 absolute top-0 left-0'}>
       <div class={'p-1'} title={'返回'}>

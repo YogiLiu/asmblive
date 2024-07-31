@@ -1,31 +1,24 @@
 import { Component, createResource, For, Index, Show } from 'solid-js'
 import { A, createAsync } from '@solidjs/router'
-import { AddBoard, GetBoards, RemoveBoard } from 'wails/go/service/BoardService'
-import { service } from 'wails/go/models'
-import { nanoid } from 'nanoid'
-import { GetVersion } from 'wails/go/main/version'
+import { Board as BoardType } from '../service/types'
+import { addBoard, getBorders, removeBoard } from '../service/board'
+import { getVersion } from '../service/version'
 
 const Home: Component = () => {
-  const [boards, { mutate }] = createResource(GetBoards, {
+  const [boards, { mutate }] = createResource(getBorders, {
     initialValue: [],
   })
   const handleAdd = async () => {
-    const boards = await AddBoard(
-      new service.BoardDTO({
-        id: nanoid(),
-        name: '未命名看板',
-        rooms: [],
-      }),
-    )
+    const boards = await addBoard()
     mutate(boards)
   }
-  const handleRemove = async (board: service.BoardDTO) => {
-    const b = await RemoveBoard(board.id)
+  const handleRemove = async (board: BoardType) => {
+    const b = await removeBoard(board.id)
     if (b.id === board.id) {
       mutate((boards) => boards.filter((item) => item.id !== board.id))
     }
   }
-  const version = createAsync(() => GetVersion().then((v) => 'v' + v), {
+  const version = createAsync(() => getVersion().then((v) => 'v' + v), {
     initialValue: '',
   })
   return (
@@ -78,7 +71,7 @@ const Home: Component = () => {
 
 export default Home
 
-const Board: Component<{ board: service.BoardDTO }> = (props) => {
+const Board: Component<{ board: BoardType }> = (props) => {
   return (
     <A
       href={`/boards/${props.board.id}`}

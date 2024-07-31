@@ -1,19 +1,19 @@
 import { cache, createAsync } from '@solidjs/router'
-import { GetRoom } from 'wails/go/service/PlatformService'
 import { Component, createSignal, onMount, Show, Suspense } from 'solid-js'
-import { service } from 'wails/go/models'
 import { Portal } from 'solid-js/web'
 import Loading from './Loading'
 import Form from './Form'
 import Result from './Result'
+import { getRoom } from '../../service/platform'
+import { Room } from '../../service/types'
 
 const cachedGetRoom = cache(
-  (pid: string, rid: string) => GetRoom(pid, rid),
+  (pid: string, rid: string) => getRoom(pid, rid),
   'GetRoom',
 )
 
 const RoomSelector: Component<{
-  onSelect: (room: service.RoomDto | null) => void
+  onSelect: (room: Room | null) => void
   show: boolean
 }> = (props) => {
   onMount(() => {

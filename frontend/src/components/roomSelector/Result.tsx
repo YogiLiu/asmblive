@@ -1,12 +1,12 @@
 import { Component, Show } from 'solid-js'
-import { service } from 'wails/go/models'
 import Owner from '../Owner'
 import Empty from './Empty'
+import { Room } from '../../service/types'
 
-type OnSelect = (room: service.RoomDto) => void
+type OnSelect = (room: Room) => void
 
 const Result: Component<{
-  room: service.RoomDto | null
+  room: Room | null
   onSelect: OnSelect
 }> = (props) => {
   return (

@@ -6,9 +6,9 @@ import {
   onMount,
   Show,
 } from 'solid-js'
-import { service } from 'wails/go/models'
-import { GetRoom } from 'wails/go/service/PlatformService'
 import Owner from '../Owner'
+import { BoardRoom, Room } from '../../service/types'
+import { getRoom } from '../../service/platform'
 
 const minTimeout = 30000 // 30 seconds
 const maxTimeout = 60000 // 60 seconds
@@ -18,19 +18,19 @@ function getRandomRefetchTimeout(): number {
 }
 
 type Props = {
-  room: service.BoardRoomDTO
-  onDelete?: (room: service.RoomDto) => void
+  room: BoardRoom
+  onDelete?: (room: Room) => void
 }
 
 const RoomBtn: Component<Props> = (props) => {
-  const [room, setRoom] = createSignal<service.RoomDto>()
+  const [room, setRoom] = createSignal<Room>()
   onMount(() => {
-    GetRoom(props.room.platformId, props.room.id).then((r) => r && setRoom(r))
+    getRoom(props.room.platformId, props.room.id).then((r) => r && setRoom(r))
     let timer: number
     function refetch() {
       // @ts-expect-error TS2322
       timer = setTimeout(refetch, getRandomRefetchTimeout())
-      GetRoom(props.room.platformId, props.room.id).then((r) => r && setRoom(r))
+      getRoom(props.room.platformId, props.room.id).then((r) => r && setRoom(r))
     }
     // @ts-expect-error TS2322
     timer = setTimeout(refetch, getRandomRefetchTimeout())
