@@ -8,6 +8,8 @@ type Props = {
   rooms: BoardRoom[]
   onAdd: (room: Room) => void
   onRemove: (room: Room) => void
+  onSelect?: (room: Room) => void
+  onUnselect?: (room: Room) => void
 }
 
 const RoomList: Component<Props> = (props) => {
@@ -30,7 +32,14 @@ const RoomList: Component<Props> = (props) => {
           }
         >
           <For each={props.rooms}>
-            {(room) => <RoomBtn room={room} onDelete={deleteHandler} />}
+            {(room) => (
+              <RoomBtn
+                room={room}
+                onDelete={deleteHandler}
+                onSelect={props.onSelect}
+                onUnselect={props.onUnselect}
+              />
+            )}
           </For>
         </div>
         <span class={'px-1 divider my-0'} />
