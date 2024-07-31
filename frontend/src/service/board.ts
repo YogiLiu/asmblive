@@ -43,27 +43,25 @@ export const getBoard = async (id: string): Promise<Board> => {
 
 const defaultBoardName = '未命名看板'
 
-export const addBoard = async (): Promise<Board[]> => {
-  const bs = await AddBoard(
+export const addBoard = async (): Promise<Board> => {
+  const nb = await AddBoard(
     new service.BoardDTO({
       id: nanoid(),
       name: defaultBoardName,
       rooms: [],
     }),
   )
-  return bs.map((b) => {
-    return {
-      id: b.id,
-      name: b.name,
-      rooms: b.rooms.map((r) => {
-        return {
-          id: r.id,
-          platformId: r.platformId,
-          avatarUrl: r.avatarUrl,
-        }
-      }),
-    }
-  })
+  return {
+    id: nb.id,
+    name: nb.name,
+    rooms: nb.rooms.map((r) => {
+      return {
+        id: r.id,
+        platformId: r.platformId,
+        avatarUrl: r.avatarUrl,
+      }
+    }),
+  }
 }
 
 export const removeBoard = async (id: string): Promise<Board> => {

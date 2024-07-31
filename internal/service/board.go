@@ -42,7 +42,7 @@ func (s BoardService) GetBoard(bId string) *BoardDTO {
 	return nil
 }
 
-func (s BoardService) AddBoard(b BoardDTO) []BoardDTO {
+func (s BoardService) AddBoard(b BoardDTO) *BoardDTO {
 	bs, err := s.s.Read()
 	if err != nil {
 		s.log.Error("error getting boards", "err", err)
@@ -54,7 +54,7 @@ func (s BoardService) AddBoard(b BoardDTO) []BoardDTO {
 		s.log.Error("error writing boards", "err", err)
 		return nil
 	}
-	return newBs
+	return &b
 }
 
 func (s BoardService) RemoveBoard(bId string) *BoardDTO {

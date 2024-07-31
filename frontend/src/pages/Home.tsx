@@ -9,13 +9,13 @@ const Home: Component = () => {
     initialValue: [],
   })
   const handleAdd = async () => {
-    const boards = await addBoard()
-    mutate(boards)
+    const nb = await addBoard()
+    mutate((boards) => [...boards, nb])
   }
   const handleRemove = async (board: BoardType) => {
     const b = await removeBoard(board.id)
     if (b.id === board.id) {
-      mutate((boards) => boards.filter((item) => item.id !== board.id))
+      mutate((boards) => boards.filter((item) => item.id !== b.id))
     }
   }
   const version = createAsync(() => getVersion().then((v) => 'v' + v), {

@@ -149,7 +149,7 @@ func TestBoardService_AddBoard(t *testing.T) {
 		name   string
 		fields fields
 		args   args
-		want   []BoardDTO
+		want   *BoardDTO
 	}{
 		{
 			name: "should return boards",
@@ -163,11 +163,9 @@ func TestBoardService_AddBoard(t *testing.T) {
 				},
 			}},
 			args: args{b: BoardDTO{Id: "1", Name: "board1"}},
-			want: []BoardDTO{
-				{
-					Id:   "1",
-					Name: "board1",
-				},
+			want: &BoardDTO{
+				Id:   "1",
+				Name: "board1",
 			},
 		},
 		{
