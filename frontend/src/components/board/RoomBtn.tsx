@@ -85,44 +85,10 @@ const RoomBtn: Component<Props> = (props) => {
           <Show when={isSelect()}>
             <div
               class={
-                'absolute top-0 left-0 w-full h-full bg-base-300 bg-opacity-50 flex justify-center items-center'
+                'absolute top-0 left-0 w-full h-full bg-base-300 bg-opacity-40 flex justify-center items-center'
               }
             >
-              <svg
-                xmlns={'http://www.w3.org/2000/svg'}
-                viewBox={'0 0 30 30'}
-                class={'fill-success w-4 h-4'}
-              >
-                <rect x={0} y={0} height={30} width={10}>
-                  <animate
-                    attributeName={'y'}
-                    from={30}
-                    to={0}
-                    dur={'0.6s'}
-                    repeatCount={'indefinite'}
-                  />
-                </rect>
-                <rect x={10} y={0} height={30} width={10}>
-                  <animate
-                    attributeName={'y'}
-                    from={30}
-                    to={0}
-                    dur={'0.6s'}
-                    begin={'0.2s'}
-                    repeatCount={'indefinite'}
-                  />
-                </rect>
-                <rect x={20} y={0} height={30} width={10}>
-                  <animate
-                    attributeName={'y'}
-                    from={30}
-                    to={0}
-                    dur={'0.6s'}
-                    begin={'0.4s'}
-                    repeatCount={'indefinite'}
-                  />
-                </rect>
-              </svg>
+              <PlayingIcon />
             </div>
           </Show>
           <div class={'absolute top-0 right-0 w-full h-full overflow-hidden'}>
@@ -160,5 +126,45 @@ const PlaceHolder: Component<{ avatarUrl: string }> = (props) => {
         </div>
       </div>
     </div>
+  )
+}
+
+const PlayingIcon: Component = () => {
+  return (
+    <svg
+      xmlns={'http://www.w3.org/2000/svg'}
+      viewBox={'0 0 30 30'}
+      class={'fill-success w-4 h-4'}
+    >
+      <rect x={0} y={30} height={30} width={10}>
+        <animate
+          attributeName={'y'}
+          values={'30;0;30'}
+          keyTimes={'0;0.5;1'}
+          dur={'0.6s'}
+          repeatCount={'indefinite'}
+        />
+      </rect>
+      <rect x={10} y={30} height={30} width={10}>
+        <animate
+          attributeName={'y'}
+          values={'30;0;30'}
+          keyTimes={'0;0.5;1'}
+          dur={'0.6s'}
+          begin={'0.2s'}
+          repeatCount={'indefinite'}
+        />
+      </rect>
+      <rect x={20} y={30} height={30} width={10}>
+        <animate
+          attributeName={'y'}
+          values={'30;0;30'}
+          keyTimes={'0;0.5;1'}
+          dur={'0.6s'}
+          begin={'0.4s'}
+          repeatCount={'indefinite'}
+        />
+      </rect>
+    </svg>
   )
 }
