@@ -20,6 +20,8 @@ function getRandomRefetchTimeout(): number {
 type Props = {
   room: BoardRoom
   onDelete?: (room: Room) => void
+  onSelect?: (room: Room) => void
+  onUnselect?: (room: Room) => void
 }
 
 const RoomBtn: Component<Props> = (props) => {
@@ -54,15 +56,24 @@ const RoomBtn: Component<Props> = (props) => {
     setDragStartX(0)
     setIsDragging(false)
   }
+  const [isSelect, setIsSelect] = createSignal(false)
+  const handleSelect = () => {
+    if (isSelect()) {
+      props.onUnselect?.(room()!)
+    } else {
+      props.onSelect?.(room()!)
+    }
+    setIsSelect((s) => !s)
+  }
   return (
     <Show
       when={room()}
       fallback={<PlaceHolder avatarUrl={props.room.avatarUrl} />}
     >
       <button
-        disabled={!room()!.isOnline}
         class={'p-1 cursor-pointer'}
         title={room()!.owner.name}
+        onClick={handleSelect}
       >
         <div
           class={'relative'}
@@ -71,6 +82,49 @@ const RoomBtn: Component<Props> = (props) => {
           onDragEnd={dragEndHandler}
         >
           <Owner room={room()!} />
+          <Show when={isSelect()}>
+            <div
+              class={
+                'absolute top-0 left-0 w-full h-full bg-base-300 bg-opacity-50 flex justify-center items-center'
+              }
+            >
+              <svg
+                xmlns={'http://www.w3.org/2000/svg'}
+                viewBox={'0 0 30 30'}
+                class={'fill-success w-4 h-4'}
+              >
+                <rect x={0} y={0} height={30} width={10}>
+                  <animate
+                    attributeName={'y'}
+                    from={30}
+                    to={0}
+                    dur={'0.6s'}
+                    repeatCount={'indefinite'}
+                  />
+                </rect>
+                <rect x={10} y={0} height={30} width={10}>
+                  <animate
+                    attributeName={'y'}
+                    from={30}
+                    to={0}
+                    dur={'0.6s'}
+                    begin={'0.2s'}
+                    repeatCount={'indefinite'}
+                  />
+                </rect>
+                <rect x={20} y={0} height={30} width={10}>
+                  <animate
+                    attributeName={'y'}
+                    from={30}
+                    to={0}
+                    dur={'0.6s'}
+                    begin={'0.4s'}
+                    repeatCount={'indefinite'}
+                  />
+                </rect>
+              </svg>
+            </div>
+          </Show>
           <div class={'absolute top-0 right-0 w-full h-full overflow-hidden'}>
             <div
               class={
