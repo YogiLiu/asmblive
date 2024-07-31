@@ -13,19 +13,25 @@ const Board: Component = () => {
         return
       }
     }
+    const br = {
+      id: room.id,
+      platformId: room.platform.id,
+      avatarUrl: room.owner.avatarUrl,
+    }
     const newBoard = await updateBoard({
       ...board()!,
-      rooms: [
-        ...board()!.rooms,
-        {
-          id: room.id,
-          platformId: room.platform.id,
-          avatarUrl: room.owner.avatarUrl,
-        },
-      ],
+      rooms: [...board()!.rooms, br],
     })
     if (newBoard.id === board()!.id) {
-      mutate(newBoard)
+      mutate((pre) => {
+        if (!pre) {
+          return newBoard
+        }
+        return {
+          ...pre,
+          rooms: [...pre.rooms, br],
+        }
+      })
     }
   }
   const handleRemove = async (room: Room) => {
@@ -36,7 +42,17 @@ const Board: Component = () => {
       ),
     })
     if (newBoard.id === board()!.id) {
-      mutate(newBoard)
+      mutate((pre) => {
+        if (!pre) {
+          return newBoard
+        }
+        return {
+          ...pre,
+          rooms: pre.rooms.filter(
+            (r) => r.id !== room.id || r.platformId !== room.platform.id,
+          ),
+        }
+      })
     }
   }
   const [isEditingName, setIsEditingName] = createSignal(false)
@@ -55,7 +71,15 @@ const Board: Component = () => {
       name: name,
     })
     if (newBoard.id === board()!.id) {
-      mutate(newBoard)
+      mutate((pre) => {
+        if (!pre) {
+          return newBoard
+        }
+        return {
+          ...pre,
+          name: name,
+        }
+      })
     }
   }
   const handleEscape: JSX.EventHandler<HTMLFormElement, KeyboardEvent> = (
