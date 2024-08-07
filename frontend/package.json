@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@solidjs/router": "^0.14.1",
+    "hls.js": "^1.5.14",
     "nanoid": "^5.0.7",
     "solid-js": "^1.8.18"
   },

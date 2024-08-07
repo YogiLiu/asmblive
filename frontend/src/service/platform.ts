@@ -1,5 +1,10 @@
-import { Platform, Room } from './types'
-import { GetPlatforms, GetRoom } from 'wails/go/service/PlatformService'
+import { Platform, Quality, Room } from './types'
+import {
+  GetLiveUrls,
+  GetPlatforms,
+  GetQualities,
+  GetRoom,
+} from 'wails/go/service/PlatformService'
 
 export const getRoom = async (
   platfomtId: string,
@@ -31,4 +36,24 @@ export const getPlatforms = async (): Promise<Platform[]> => {
     name: p.name,
     iconUrl: p.iconUrl,
   }))
+}
+
+export const getQualities = async (
+  platformId: string,
+  roomId: string,
+): Promise<Quality[]> => {
+  const qs = await GetQualities(platformId, roomId)
+  return qs.map((q) => ({
+    id: q.id,
+    name: q.name,
+    priority: q.priority,
+  }))
+}
+
+export const getLiveUrls = async (
+  platformId: string,
+  roomId: string,
+  qualityId: string,
+): Promise<string[]> => {
+  return await GetLiveUrls(platformId, roomId, qualityId)
 }

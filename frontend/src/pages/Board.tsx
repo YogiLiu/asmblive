@@ -1,8 +1,16 @@
-import { Component, createResource, createSignal, JSX, Show } from 'solid-js'
+import {
+  Component,
+  createResource,
+  createSignal,
+  For,
+  JSX,
+  Show,
+} from 'solid-js'
 import { useParams } from '@solidjs/router'
 import RoomList from '../components/board/RoomList'
 import { getBoard, updateBoard } from '../service/board'
 import { Room } from '../service/types'
+import Player from '../components/board/Player'
 
 const Board: Component = () => {
   const id = useParams().id
@@ -89,12 +97,27 @@ const Board: Component = () => {
       setIsEditingName(false)
     }
   }
+  const [selectedRooms, setSelectedRooms] = createSignal<Room[]>([])
+  const handleSelect = (room: Room) => {
+    setSelectedRooms((pre) => {
+      if (
+        pre.find((r) => r.id === room.id && r.platform.id === room.platform.id)
+      ) {
+        return pre.filter(
+          (r) => r.id !== room.id || r.platform.id !== room.platform.id,
+        )
+      }
+      return [...pre, room]
+    })
+  }
   return (
     <Show when={board()}>
       <RoomList
         rooms={board()!.rooms}
         onAdd={handleAdd}
         onRemove={handleRemove}
+        onSelect={handleSelect}
+        onUnselect={handleSelect}
       />
       <div class={'m-1 ml-20'}>
         <label
@@ -127,10 +150,10 @@ const Board: Component = () => {
         </label>
         <div
           class={
-            'w-full h-[calc(100vh-4.5rem)] overflow-scroll border rounded-box'
+            'w-full h-[calc(100vh-4.5rem)] overflow-scroll grid grid-cols-2 content-start gap-2'
           }
         >
-          123
+          <For each={selectedRooms()}>{(room) => <Player room={room} />}</For>
         </div>
       </div>
     </Show>

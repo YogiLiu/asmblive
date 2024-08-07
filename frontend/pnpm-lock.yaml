@@ -10,6 +10,9 @@ importers:
       '@solidjs/router':
         specifier: ^0.14.1
         version: 0.14.1(solid-js@1.8.18)
+      hls.js:
+        specifier: ^1.5.14
+        version: 1.5.14
       nanoid:
         specifier: ^5.0.7
         version: 5.0.7
@@ -1503,6 +1506,12 @@ packages:
         integrity: sha512-0hJU9SCPvmMzIBdZFqNPXWa6dqh7WdH0cII9y+CyS8rG3nL48Bclra9HmKhVVUHyPWNH5Y7xDwAB7bfgSjkUMQ==,
       }
     engines: { node: '>= 0.4' }
+
+  hls.js@1.5.14:
+    resolution:
+      {
+        integrity: sha512-5wLiQ2kWJMui6oUslaq8PnPOv1vjuee5gTxjJD0DSsccY12OXtDT0h137UuqjczNeHzeEYR0ROZQibKNMr7Mzg==,
+      }
 
   html-entities@2.3.3:
     resolution:
@@ -3323,6 +3332,8 @@ snapshots:
   hasown@2.0.2:
     dependencies:
       function-bind: 1.1.2
+
+  hls.js@1.5.14: {}
 
   html-entities@2.3.3: {}
 
