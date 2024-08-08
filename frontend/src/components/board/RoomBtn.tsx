@@ -9,6 +9,7 @@ import {
 import Owner from '../Owner'
 import { BoardRoom, Room } from '../../service/types'
 import { getRoom } from '../../service/platform'
+import { Portal } from 'solid-js/web'
 
 const minTimeout = 30000 // 30 seconds
 const maxTimeout = 60000 // 60 seconds
@@ -38,24 +39,6 @@ const RoomBtn: Component<Props> = (props) => {
     timer = setTimeout(refetch, getRandomRefetchTimeout())
     onCleanup(() => clearTimeout(timer))
   })
-  const [dragStartX, setDragStartX] = createSignal(0)
-  const [isDragging, setIsDragging] = createSignal(false)
-  const dragStartHandler: JSX.EventHandler<HTMLDivElement, DragEvent> = (
-    event,
-  ) => {
-    setDragStartX(event.clientX)
-    setIsDragging(true)
-  }
-  const deleteThreshold = 64
-  const dragEndHandler: JSX.EventHandler<HTMLDivElement, DragEvent> = (
-    event,
-  ) => {
-    if (Math.abs(event.clientX - dragStartX()) >= deleteThreshold) {
-      props.onDelete?.(room()!)
-    }
-    setDragStartX(0)
-    setIsDragging(false)
-  }
   const [isSelect, setIsSelect] = createSignal(false)
   const handleSelect = () => {
     if (isSelect()) {
@@ -64,6 +47,30 @@ const RoomBtn: Component<Props> = (props) => {
       props.onSelect?.(room()!)
     }
     setIsSelect((s) => !s)
+  }
+  const [optStyle, setOptStyle] = createSignal<JSX.CSSProperties>({})
+  const handleContextMenu: JSX.EventHandler<HTMLButtonElement, MouseEvent> = (
+    event,
+  ) => {
+    event.preventDefault()
+    const pos = event.currentTarget.getBoundingClientRect()
+    setOptStyle({
+      top: `${pos.top}px`,
+      left: `${pos.right}px`,
+    })
+    const close = () => {
+      setOptStyle({})
+      document.removeEventListener('click', close)
+      document.removeEventListener('contextmenu', close)
+    }
+    document.addEventListener('click', close)
+    document.addEventListener('contextmenu', close)
+  }
+  const handleDelete: JSX.EventHandler<HTMLButtonElement, MouseEvent> = (
+    event,
+  ) => {
+    event.stopPropagation()
+    props.onDelete?.(room()!)
   }
   return (
     <Show
@@ -74,13 +81,9 @@ const RoomBtn: Component<Props> = (props) => {
         class={'p-1 cursor-pointer'}
         title={room()!.owner.name}
         onClick={handleSelect}
+        onContextMenu={handleContextMenu}
       >
-        <div
-          class={'relative'}
-          draggable={true}
-          onDragStart={dragStartHandler}
-          onDragEnd={dragEndHandler}
-        >
+        <div class={'relative'}>
           <Owner room={room()!} />
           <Show when={isSelect()}>
             <div
@@ -91,20 +94,30 @@ const RoomBtn: Component<Props> = (props) => {
               <PlayingIcon />
             </div>
           </Show>
-          <div class={'absolute top-0 right-0 w-full h-full overflow-hidden'}>
+        </div>
+        <Portal>
+          <Show when={optStyle()}>
             <div
               class={
-                'w-full h-full bg-base-300 bg-opacity-70 flex justify-center items-center rounded-box transition-all'
+                'absolute border rounded-box overflow-hidden shadow-md bg-base-100 min-w-32'
               }
-              classList={{
-                '-translate-x-full': !isDragging(),
-                'translate-x-0': isDragging(),
-              }}
+              style={optStyle()}
+              onClick={(e) => e.stopPropagation()}
             >
-              <span class={'iconify ph--trash-bold text-xl text-error'} />
+              <div class={'px-4 my-1 text-xs text-base-content text-center'}>
+                {room()?.owner.name}
+              </div>
+              <button
+                class={
+                  'px-4 py-2 text-error hover:bg-error hover:text-base-100 w-full'
+                }
+                onClick={handleDelete}
+              >
+                删除
+              </button>
             </div>
-          </div>
-        </div>
+          </Show>
+        </Portal>
       </button>
     </Show>
   )
