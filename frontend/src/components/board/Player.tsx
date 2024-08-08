@@ -190,13 +190,18 @@ const Video: Component<VideoProps> = (props) => {
           <Loading />
         </div>
       </Show>
-      <Controls onSwitchMuted={() => (videoRef.muted = !videoRef.muted)} />
+      <Controls
+        onVolumeChange={(v) => {
+          videoRef.muted = v === 0
+          videoRef.volume = v
+        }}
+      />
     </div>
   )
 }
 
 type ControlsProps = {
-  onSwitchMuted?: () => void
+  onVolumeChange?: (volume: number) => void
 }
 
 const Controls: Component<ControlsProps> = (props) => {
@@ -221,6 +226,7 @@ const Controls: Component<ControlsProps> = (props) => {
     })
     onCleanup(() => clearTimeout(timer))
   })
+  const [volume, setVolume] = createSignal(0)
   return (
     <div class={'absolute w-full h-full top-0 left-0'} ref={ref!}>
       <div
@@ -232,15 +238,32 @@ const Controls: Component<ControlsProps> = (props) => {
       >
         <div
           class={
-            'absolute bottom-0 left-0 w-full p-2 bg-gradient-to-b from-transparent to-base-content *:cursor-pointer'
+            'absolute bottom-0 left-0 w-full p-2 bg-gradient-to-b from-transparent to-base-content'
           }
           onMouseEnter={() => setCanClose(false)}
           onMouseLeave={() => setCanClose(true)}
         >
-          <span
-            class={'iconify ph--speaker-simple-high-bold'}
-            onClick={() => props.onSwitchMuted?.()}
-          />
+          <div class={'flex gap-2'}>
+            <span
+              class={'iconify'}
+              classList={{
+                'ph--speaker-simple-high-bold': volume() > 0,
+                'ph--speaker-simple-x-bold': volume() === 0,
+              }}
+            />
+            <input
+              type={'range'}
+              min={'0'}
+              max={'100'}
+              value={volume()}
+              onInput={(e) => {
+                const value = e.currentTarget.value
+                props.onVolumeChange?.(parseInt(value) / 100)
+                setVolume(parseInt(value))
+              }}
+              class={'range range-primary range-xs w-20'}
+            />
+          </div>
         </div>
       </div>
     </div>
