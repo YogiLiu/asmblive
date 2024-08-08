@@ -17,7 +17,7 @@ const Result: Component<{
           'mt-4 rounded-box overflow-hidden relative hover:outline outline-accent outline-offset-2 cursor-pointer'
         }
       >
-        <div class={'w-full aspect-w-16 aspect-h-9'}>
+        <div class={'w-full aspect-video'}>
           <img
             class={'w-full h-full'}
             src={props.room!.coverUrl}
