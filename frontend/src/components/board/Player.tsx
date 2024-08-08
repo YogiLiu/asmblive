@@ -234,6 +234,7 @@ const Controls: Component<ControlsProps> = (props) => {
     onCleanup(() => clearTimeout(timer))
   })
   const [volume, setVolume] = createSignal(0)
+  const [isMuted, setIsMuted] = createSignal(true)
   const [isFullscreen, setIsFullscreen] = createSignal(false)
   return (
     <div
@@ -260,10 +261,20 @@ const Controls: Component<ControlsProps> = (props) => {
           <div class={'flex-grow'}>
             <div class={'flex items-center'}>
               <span
-                class={'iconify'}
+                class={'iconify cursor-pointer'}
                 classList={{
-                  'ph--speaker-simple-high-bold': volume() > 0,
-                  'ph--speaker-simple-x-bold': volume() === 0,
+                  'ph--speaker-simple-high-bold': !isMuted() && volume() >= 50,
+                  'ph--speaker-simple-low-bold': !isMuted() && volume() < 50,
+                  'ph--speaker-simple-x-bold': isMuted(),
+                }}
+                onClick={() => {
+                  if (volume() === 0) {
+                    props.onVolumeChange?.(isMuted() ? 0.6 : 0)
+                    setVolume(100)
+                  } else {
+                    props.onVolumeChange?.(isMuted() ? volume() / 100 : 0)
+                  }
+                  setIsMuted((s) => !s)
                 }}
               />
               <input
@@ -272,11 +283,15 @@ const Controls: Component<ControlsProps> = (props) => {
                 max={'100'}
                 value={volume()}
                 onInput={(e) => {
-                  const value = e.currentTarget.value
-                  props.onVolumeChange?.(parseInt(value) / 100)
-                  setVolume(parseInt(value))
+                  const value = parseInt(e.currentTarget.value)
+                  props.onVolumeChange?.(value / 100)
+                  setVolume(value)
+                  setIsMuted(value === 0)
                 }}
-                class={'range range-primary range-xs w-24 ml-2'}
+                class={'range range-xs w-24 ml-2'}
+                classList={{
+                  'range-primary': !isMuted(),
+                }}
               />
             </div>
           </div>
