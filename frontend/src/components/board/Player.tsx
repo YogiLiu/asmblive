@@ -59,11 +59,28 @@ const Player: Component<Props> = (props) => {
   createEffect(() => {
     setSelectLiveUrl(liveUrls()?.[0])
   })
+  const [showInfo, setShowInfo] = createSignal(false)
+  let playerRef: HTMLDivElement
+  onMount(() => {
+    let timer: number
+    playerRef.addEventListener('mousemove', () => {
+      setShowInfo(true)
+      clearTimeout(timer)
+      timer = window.setTimeout(() => {
+        setShowInfo(false)
+      }, 1000)
+    })
+    playerRef.addEventListener('mouseleave', () => {
+      setShowInfo(false)
+      clearTimeout(timer)
+    })
+  })
   return (
     <div
       class={
-        'bg-accent-content rounded-box overflow-hidden aspect-video *:w-full *:h-full'
+        'bg-accent-content rounded-box overflow-hidden aspect-video *:w-full *:h-full relative'
       }
+      ref={playerRef!}
     >
       <Suspense fallback={<Loading />}>
         <Show when={room()?.isOnline} fallback={<Offline />}>
@@ -72,6 +89,31 @@ const Player: Component<Props> = (props) => {
               <Video url={selectLiveUrl()!} poster={room()!.coverUrl} />
             </Show>
           </Show>
+        </Show>
+        <Show when={room()}>
+          <div
+            class={
+              'absolute top-0 left-0 !h-fit bg-gradient-to-t from-transparent to-base-content text-base-100 pb-6 pt-2 px-2 flex items-center gap-2'
+            }
+            classList={{
+              hidden: !showInfo(),
+              block: showInfo(),
+            }}
+          >
+            <div class={'avatar'}>
+              <div class={'w-10 rounded-full relative'}>
+                <img src={room()!.owner.avatarUrl} alt={'avatar'} />
+              </div>
+              <img
+                class={
+                  'absolute bottom-0 right-0 !w-5 !h-5 rounded-full bg-base-100 p-1'
+                }
+                src={room()!.platform.iconUrl}
+                alt={'platform'}
+              />
+            </div>
+            <div>{room()!.owner.name}</div>
+          </div>
         </Show>
       </Suspense>
     </div>
@@ -188,13 +230,6 @@ const Controls: Component<ControlsProps> = (props) => {
           block: open(),
         }}
       >
-        <div
-          class={
-            'absolute top-0 left-0 w-full p-2 bg-gradient-to-t from-transparent to-base-content'
-          }
-          onMouseEnter={() => setCanClose(false)}
-          onMouseLeave={() => setCanClose(true)}
-        />
         <div
           class={
             'absolute bottom-0 left-0 w-full p-2 bg-gradient-to-b from-transparent to-base-content *:cursor-pointer'
