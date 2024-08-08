@@ -127,7 +127,7 @@ const Board: Component = () => {
         >
           <Show
             when={isEditingName()}
-            fallback={<div class={'w-fit'}>{board()!.name}</div>}
+            fallback={<Title name={board()!.name} />}
           >
             <form
               onSubmit={handleSubmit}
@@ -168,3 +168,12 @@ const Board: Component = () => {
 }
 
 export default Board
+
+const Title: Component<{ name: string }> = (props) => {
+  return (
+    <div class={'w-fit flex items-center cursor-pointer'}>
+      {props.name}
+      <span class={'iconify ph--note-pencil ml-2 text-base-300'} />
+    </div>
+  )
+}
