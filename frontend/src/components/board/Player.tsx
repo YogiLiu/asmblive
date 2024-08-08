@@ -144,11 +144,10 @@ const Offline: Component = () => {
 type VideoProps = {
   url: string
   poster?: string
-  onRequestFullscreen?: () => void
-  onExitFullscreen?: () => void
 }
 
 const Video: Component<VideoProps> = (props) => {
+  let wrapperRef: HTMLDivElement
   let videoRef: HTMLVideoElement
   onMount(() => {
     if (!videoRef) {
@@ -170,7 +169,7 @@ const Video: Component<VideoProps> = (props) => {
   })
   const [isLoading, setIsLoading] = createSignal(true)
   return (
-    <div class={'relative w-full h-full'}>
+    <div class={'relative w-full h-full'} ref={wrapperRef!}>
       <video
         class={'w-full h-full'}
         controls={false}
@@ -195,6 +194,13 @@ const Video: Component<VideoProps> = (props) => {
           videoRef.muted = v === 0
           videoRef.volume = v
         }}
+        onFullscreen={(s) => {
+          if (s) {
+            wrapperRef.requestFullscreen()
+          } else {
+            document.exitFullscreen()
+          }
+        }}
       />
     </div>
   )
@@ -202,6 +208,7 @@ const Video: Component<VideoProps> = (props) => {
 
 type ControlsProps = {
   onVolumeChange?: (volume: number) => void
+  onFullscreen?: (status: boolean) => void
 }
 
 const Controls: Component<ControlsProps> = (props) => {
@@ -227,8 +234,15 @@ const Controls: Component<ControlsProps> = (props) => {
     onCleanup(() => clearTimeout(timer))
   })
   const [volume, setVolume] = createSignal(0)
+  const [isFullscreen, setIsFullscreen] = createSignal(false)
   return (
-    <div class={'absolute w-full h-full top-0 left-0'} ref={ref!}>
+    <div
+      class={'absolute w-full h-full top-0 left-0'}
+      classList={{
+        'cursor-none': isFullscreen() && !open(),
+      }}
+      ref={ref!}
+    >
       <div
         class={'relative w-full h-full text-base-300'}
         classList={{
@@ -238,31 +252,48 @@ const Controls: Component<ControlsProps> = (props) => {
       >
         <div
           class={
-            'absolute bottom-0 left-0 w-full p-2 bg-gradient-to-b from-transparent to-base-content'
+            'absolute bottom-0 left-0 w-full p-4 bg-gradient-to-b from-transparent to-base-content flex justify-between text-xl'
           }
           onMouseEnter={() => setCanClose(false)}
           onMouseLeave={() => setCanClose(true)}
         >
-          <div class={'flex gap-2'}>
-            <span
-              class={'iconify'}
-              classList={{
-                'ph--speaker-simple-high-bold': volume() > 0,
-                'ph--speaker-simple-x-bold': volume() === 0,
-              }}
-            />
-            <input
-              type={'range'}
-              min={'0'}
-              max={'100'}
-              value={volume()}
-              onInput={(e) => {
-                const value = e.currentTarget.value
-                props.onVolumeChange?.(parseInt(value) / 100)
-                setVolume(parseInt(value))
-              }}
-              class={'range range-primary range-xs w-20'}
-            />
+          <div class={'flex-grow'}>
+            <div class={'flex items-center'}>
+              <span
+                class={'iconify'}
+                classList={{
+                  'ph--speaker-simple-high-bold': volume() > 0,
+                  'ph--speaker-simple-x-bold': volume() === 0,
+                }}
+              />
+              <input
+                type={'range'}
+                min={'0'}
+                max={'100'}
+                value={volume()}
+                onInput={(e) => {
+                  const value = e.currentTarget.value
+                  props.onVolumeChange?.(parseInt(value) / 100)
+                  setVolume(parseInt(value))
+                }}
+                class={'range range-primary range-xs w-24 ml-2'}
+              />
+            </div>
+          </div>
+          <div>
+            <div>
+              <span
+                class={'iconify cursor-pointer'}
+                classList={{
+                  'ph--arrows-out-bold': !isFullscreen(),
+                  'ph--arrows-in-bold': isFullscreen(),
+                }}
+                onClick={() => {
+                  props.onFullscreen?.(!isFullscreen())
+                  setIsFullscreen(!isFullscreen())
+                }}
+              />
+            </div>
           </div>
         </div>
       </div>
