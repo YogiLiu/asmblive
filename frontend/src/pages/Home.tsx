@@ -76,7 +76,7 @@ const Board: Component<{ board: BoardType }> = (props) => {
     <A
       href={`/boards/${props.board.id}`}
       class={
-        'w-full h-full hover:outline overflow-y-scroll rounded-box border outline-offset-2 outline-accent flex flex-wrap justify-between p-2 gap-1'
+        'w-full h-full hover:outline overflow-y-scroll noscrollbar rounded-box border outline-offset-2 outline-accent flex flex-wrap justify-between p-2 gap-1'
       }
       title={props.board.name}
     >
