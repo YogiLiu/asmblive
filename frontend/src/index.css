@@ -2,8 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-::-webkit-scrollbar {
+.noscrollbar::-webkit-scrollbar {
   display: none;
+  scrollbar-width: none;
 }
 
 /* disable drag for img, link */

@@ -54,7 +54,7 @@ const Player: Component<Props> = (props) => {
   return (
     <div
       class={
-        'bg-accent-content rounded-md overflow-hidden aspect-w-16 aspect-h-9 relative group'
+        'bg-accent-content rounded-box overflow-hidden aspect-w-16 aspect-h-9 relative group'
       }
     >
       <Suspense fallback={<Loading />}>
