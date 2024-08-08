@@ -1,6 +1,6 @@
 import { Component, Show } from 'solid-js'
 import Owner from '../Owner'
-import Empty from './Empty'
+import Empty from '../Empty'
 import { Room } from '../../service/types'
 
 type OnSelect = (room: Room) => void

@@ -11,6 +11,7 @@ import RoomList from '../components/board/RoomList'
 import { getBoard, updateBoard } from '../service/board'
 import { Room } from '../service/types'
 import Player from '../components/board/Player'
+import Empty from '../components/Empty'
 
 const Board: Component = () => {
   const id = useParams().id
@@ -153,11 +154,13 @@ const Board: Component = () => {
             'w-full h-[calc(100vh-4.5rem)] overflow-scroll grid content-start gap-2'
           }
           classList={{
-            'grid-cols-1': selectedRooms().length === 1,
+            'grid-cols-1': selectedRooms().length <= 1,
             'grid-cols-2': selectedRooms().length > 1,
           }}
         >
-          <For each={selectedRooms()}>{(room) => <Player room={room} />}</For>
+          <For each={selectedRooms()} fallback={<Empty />}>
+            {(room) => <Player room={room} />}
+          </For>
         </div>
       </div>
     </Show>

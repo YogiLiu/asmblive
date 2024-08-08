@@ -78,7 +78,7 @@ const Player: Component<Props> = (props) => {
   return (
     <div
       class={
-        'bg-accent-content rounded-box overflow-hidden aspect-video *:w-full *:h-full relative'
+        'bg-accent-content shadow-md overflow-hidden aspect-video *:w-full *:h-full relative'
       }
       ref={playerRef!}
     >
