@@ -168,6 +168,12 @@ const Video: Component<VideoProps> = (props) => {
     }
   })
   const [isLoading, setIsLoading] = createSignal(true)
+  const [isFullscreen, setIsFullscreen] = createSignal(false)
+  onMount(() => {
+    wrapperRef.addEventListener('fullscreenchange', () => {
+      setIsFullscreen(document.fullscreenElement === wrapperRef)
+    })
+  })
   return (
     <div class={'relative w-full h-full'} ref={wrapperRef!}>
       <video
@@ -194,6 +200,7 @@ const Video: Component<VideoProps> = (props) => {
           videoRef.muted = v === 0
           videoRef.volume = v
         }}
+        isFullscreen={isFullscreen()}
         onFullscreen={(s) => {
           if (s) {
             wrapperRef.requestFullscreen()
@@ -208,6 +215,7 @@ const Video: Component<VideoProps> = (props) => {
 
 type ControlsProps = {
   onVolumeChange?: (volume: number) => void
+  isFullscreen: boolean
   onFullscreen?: (status: boolean) => void
 }
 
@@ -235,12 +243,11 @@ const Controls: Component<ControlsProps> = (props) => {
   })
   const [volume, setVolume] = createSignal(0)
   const [isMuted, setIsMuted] = createSignal(true)
-  const [isFullscreen, setIsFullscreen] = createSignal(false)
   return (
     <div
       class={'absolute w-full h-full top-0 left-0'}
       classList={{
-        'cursor-none': isFullscreen() && !open(),
+        'cursor-none': props.isFullscreen && !open(),
       }}
       ref={ref!}
     >
@@ -300,12 +307,11 @@ const Controls: Component<ControlsProps> = (props) => {
               <span
                 class={'iconify cursor-pointer'}
                 classList={{
-                  'ph--arrows-out-bold': !isFullscreen(),
-                  'ph--arrows-in-bold': isFullscreen(),
+                  'ph--arrows-out-bold': !props.isFullscreen,
+                  'ph--arrows-in-bold': props.isFullscreen,
                 }}
                 onClick={() => {
-                  props.onFullscreen?.(!isFullscreen())
-                  setIsFullscreen(!isFullscreen())
+                  props.onFullscreen?.(!props.isFullscreen)
                 }}
               />
             </div>
