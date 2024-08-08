@@ -150,8 +150,12 @@ const Board: Component = () => {
         </label>
         <div
           class={
-            'w-full h-[calc(100vh-4.5rem)] overflow-scroll grid grid-cols-2 content-start gap-2'
+            'w-full h-[calc(100vh-4.5rem)] overflow-scroll grid content-start gap-2'
           }
+          classList={{
+            'grid-cols-1': selectedRooms().length === 1,
+            'grid-cols-2': selectedRooms().length > 1,
+          }}
         >
           <For each={selectedRooms()}>{(room) => <Player room={room} />}</For>
         </div>
