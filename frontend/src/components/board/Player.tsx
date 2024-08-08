@@ -54,7 +54,7 @@ const Player: Component<Props> = (props) => {
   return (
     <div
       class={
-        'bg-base-300 rounded-md overflow-hidden aspect-w-16 aspect-h-9 relative group'
+        'bg-accent-content rounded-md overflow-hidden aspect-w-16 aspect-h-9 relative group'
       }
     >
       <Suspense fallback={<Loading />}>
@@ -76,16 +76,18 @@ export default Player
 
 const Offline: Component = () => {
   return (
-    <div class={'flex flex-col justify-center items-center'}>
-      <span class={'iconify ph--receipt-x text-5xl'} />
-      <span class={'font-light text-sm text-info-content'}>未开播</span>
+    <div
+      class={'flex flex-col justify-center items-center text-neutral-content'}
+    >
+      <span class={'iconify ph--receipt-x text-5xl '} />
+      <span class={'font-light text-sm'}>未开播</span>
     </div>
   )
 }
 
 const Loading: Component = () => {
   return (
-    <div class={'flex justify-center items-center'}>
+    <div class={'flex justify-center items-center text-neutral-content'}>
       <span class={'loading loading-bars loading-md'} />
     </div>
   )
