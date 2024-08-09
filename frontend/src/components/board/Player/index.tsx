@@ -21,7 +21,7 @@ type Props = {
   room: Room
 }
 
-const Index: Component<Props> = (props) => {
+const Player: Component<Props> = (props) => {
   const room = createAsync(() => cachedGetRoom(props.room))
   const qualities = createAsync(() => cachedGetQualities(room()))
   const [selectedQuality, setSelectedQuality] = createSignal<
@@ -104,4 +104,4 @@ const Index: Component<Props> = (props) => {
   )
 }
 
-export default Index
+export default Player
