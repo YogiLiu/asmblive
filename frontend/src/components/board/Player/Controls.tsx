@@ -67,28 +67,28 @@ const Controls: Component<Props> = (props) => {
               <span
                 class={'iconify cursor-pointer text-xl'}
                 classList={{
-                  'ph--speaker-simple-high-bold': !isMuted() && volume() >= 50,
-                  'ph--speaker-simple-low-bold': !isMuted() && volume() < 50,
+                  'ph--speaker-simple-high-bold': !isMuted() && volume() >= 0.5,
+                  'ph--speaker-simple-low-bold': !isMuted() && volume() < 0.5,
                   'ph--speaker-simple-x-bold': isMuted(),
                 }}
                 onClick={() => {
                   if (volume() === 0) {
                     props.onVolumeChange?.(isMuted() ? 0.6 : 0)
-                    setVolume(100)
+                    setVolume(0.6)
                   } else {
-                    props.onVolumeChange?.(isMuted() ? volume() / 100 : 0)
+                    props.onVolumeChange?.(isMuted() ? volume() : 0)
                   }
                   setIsMuted((s) => !s)
                 }}
               />
               <input
                 type={'range'}
-                min={'0'}
-                max={'100'}
-                value={volume()}
+                min={0}
+                max={100}
+                value={volume() * 100}
                 onInput={(e) => {
-                  const value = parseInt(e.currentTarget.value)
-                  props.onVolumeChange?.(value / 100)
+                  const value = parseInt(e.currentTarget.value) / 100
+                  props.onVolumeChange?.(value)
                   setVolume(value)
                   setIsMuted(value === 0)
                 }}
