@@ -1,5 +1,5 @@
 import { cache } from '@solidjs/router'
-import { Quality, Room } from '../../../service/types'
+import { LiveUrl, Quality, Room } from '../../../service/types'
 import { getLiveUrls, getQualities, getRoom } from '../../../service/platform'
 
 export const cachedGetRoom = cache(async (room: Room): Promise<Room> => {
@@ -18,14 +18,14 @@ export const cachedGetQualities = cache(
 )
 
 export const cachedGetLiveUrls = cache(
-  async (room?: Room, quality?: Quality): Promise<string[]> => {
+  async (room?: Room, qualityId?: Quality['id'] | null): Promise<LiveUrl[]> => {
     if (!room) {
       return []
     }
-    if (!quality) {
+    if (!qualityId) {
       return []
     }
-    return await getLiveUrls(room.platform.id, room.id, quality.id)
+    return await getLiveUrls(room.platform.id, room.id, qualityId)
   },
   'getLiveUrls',
 )

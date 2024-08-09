@@ -28,6 +28,11 @@ export type Quality = {
   priority: number
 }
 
+export type LiveUrl = {
+  name: string
+  url: string
+}
+
 export type Room = {
   id: string
   title: string

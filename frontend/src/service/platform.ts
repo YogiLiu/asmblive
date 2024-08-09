@@ -1,4 +1,4 @@
-import { Platform, Quality, Room } from './types'
+import { LiveUrl, Platform, Quality, Room } from './types'
 import {
   GetLiveUrls,
   GetPlatforms,
@@ -54,6 +54,10 @@ export const getLiveUrls = async (
   platformId: string,
   roomId: string,
   qualityId: string,
-): Promise<string[]> => {
-  return await GetLiveUrls(platformId, roomId, qualityId)
+): Promise<LiveUrl[]> => {
+  const urls = await GetLiveUrls(platformId, roomId, qualityId)
+  return urls.map((u, idx) => ({
+    name: `线路${idx + 1}`,
+    url: u,
+  }))
 }

@@ -1,34 +1,40 @@
-import { Quality } from '../../../service/types'
-import { Component, createSignal, onCleanup, onMount, Show } from 'solid-js'
+import {
+  Component,
+  createEffect,
+  createSignal,
+  onCleanup,
+  onMount,
+  Show,
+} from 'solid-js'
 import Hls from 'hls.js'
 import Controls from './Controls'
 import Loading from './Loading'
+import { usePlayerMeta } from './playerMeta'
 
 type Props = {
-  url: string
   poster?: string
-  qualities: Quality[]
 }
 
 const Video: Component<Props> = (props) => {
+  const playerMeta = usePlayerMeta()
   let wrapperRef: HTMLDivElement
   let videoRef: HTMLVideoElement
-  onMount(() => {
+  createEffect(() => {
     if (!videoRef) {
       return
     }
-    const u = new URL(props.url)
+    const u = new URL(playerMeta.selectedLiveUrl()!.url)
     if (!u.pathname.endsWith('m3u8')) {
-      videoRef.src = props.url
+      videoRef.src = playerMeta.selectedLiveUrl()!.url
       return
     }
     if (Hls.isSupported()) {
       const hls = new Hls()
-      hls.loadSource(props.url)
+      hls.loadSource(playerMeta.selectedLiveUrl()!.url)
       hls.attachMedia(videoRef)
       onCleanup(() => hls.destroy())
     } else if (videoRef.canPlayType('application/vnd.apple.mpegurl')) {
-      videoRef.src = props.url
+      videoRef.src = playerMeta.selectedLiveUrl()!.url
     }
   })
   const [isLoading, setIsLoading] = createSignal(true)
