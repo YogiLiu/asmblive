@@ -10,7 +10,7 @@ import { useParams } from '@solidjs/router'
 import RoomList from '../components/board/RoomList'
 import { getBoard, updateBoard } from '../service/board'
 import { Room } from '../service/types'
-import Player from '../components/board/Player'
+import Index from '../components/board/Player'
 import Empty from '../components/Empty'
 
 const Board: Component = () => {
@@ -159,7 +159,7 @@ const Board: Component = () => {
           }}
         >
           <For each={selectedRooms()} fallback={<Empty />}>
-            {(room) => <Player room={room} />}
+            {(room) => <Index room={room} />}
           </For>
         </div>
       </div>
