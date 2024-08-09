@@ -12,6 +12,11 @@ import { LiveUrl, Quality, Room } from '../../../service/types'
 import { createAsync } from '@solidjs/router'
 import { cachedGetLiveUrls, cachedGetQualities } from './cacheService'
 
+type VideoInfo = {
+  width: number
+  height: number
+}
+
 type Ctx = {
   qualities: Accessor<Quality[]>
   selectedQuality: Accessor<Quality | null>
@@ -20,6 +25,9 @@ type Ctx = {
   liveUrls: Accessor<LiveUrl[]>
   selectedLiveUrl: Accessor<LiveUrl | null>
   setSelectedLiveUrl: Setter<LiveUrl | null>
+
+  videoInfo: Accessor<VideoInfo | null>
+  setVideoInfo: Setter<VideoInfo | null>
 }
 
 const ctx = createContext<Ctx>()
@@ -49,20 +57,24 @@ export const PlayerMetaProvider: ParentComponent<{ room: Room }> = (props) => {
     () => cachedGetLiveUrls(props.room, selectedQualityId()),
     { initialValue: [] },
   )
-  const [selectLiveUrl, setSelectLiveUrl] = createSignal<LiveUrl | null>(
+  const [selectedLiveUrl, setSelectedLiveUrl] = createSignal<LiveUrl | null>(
     liveUrls()[0] || null,
   )
   createEffect(() => {
-    setSelectLiveUrl(liveUrls()[0] || null)
+    setSelectedLiveUrl(liveUrls()[0] || null)
   })
+  const [videoInfo, setVideoInfo] = createSignal<VideoInfo | null>(null)
   const value: Ctx = {
-    qualities: qualities,
-    selectedQuality: selectedQuality,
-    setSelectedQualityId: setSelectedQualityId,
+    qualities,
+    selectedQuality,
+    setSelectedQualityId,
 
-    liveUrls: liveUrls,
-    selectedLiveUrl: selectLiveUrl,
-    setSelectedLiveUrl: setSelectLiveUrl,
+    liveUrls,
+    selectedLiveUrl,
+    setSelectedLiveUrl,
+
+    videoInfo,
+    setVideoInfo,
   }
   return <ctx.Provider value={value}>{props.children}</ctx.Provider>
 }

@@ -19,6 +19,20 @@ const Video: Component<Props> = (props) => {
   const playerMeta = usePlayerMeta()
   let wrapperRef: HTMLDivElement
   let videoRef: HTMLVideoElement
+  onMount(() => {
+    videoRef.addEventListener('canplay', () => {
+      playerMeta.setVideoInfo((pre) => {
+        return {
+          ...pre,
+          width: videoRef.videoWidth,
+          height: videoRef.videoHeight,
+        }
+      })
+    })
+    videoRef.addEventListener('loadstart', () => {
+      playerMeta.setVideoInfo(null)
+    })
+  })
   createEffect(() => {
     if (!videoRef) {
       return
@@ -53,7 +67,7 @@ const Video: Component<Props> = (props) => {
         autoplay={true}
         poster={props.poster}
         ref={videoRef!}
-        onWaiting={() => setIsLoading(false)}
+        onLoadStart={() => setIsLoading(true)}
         onPlaying={() => setIsLoading(false)}
       />
       <Show when={isLoading()}>

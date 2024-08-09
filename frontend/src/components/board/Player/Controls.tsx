@@ -40,6 +40,7 @@ const Controls: Component<Props> = (props) => {
   })
   const [volume, setVolume] = createSignal(0)
   const [isMuted, setIsMuted] = createSignal(true)
+  const [showInfo, setShowInfo] = createSignal(false)
   return (
     <div
       class={'absolute w-full h-full top-0 left-0'}
@@ -55,6 +56,19 @@ const Controls: Component<Props> = (props) => {
           block: open(),
         }}
       >
+        <Show when={playerMeta.videoInfo() && showInfo()}>
+          <div class={'w-full h-full flex justify-center items-center'}>
+            <div
+              class={
+                'rounded-box px-4 py-2 bg-base-content bg-opacity-90 flex flex-col gap-1'
+              }
+            >
+              <span class={'font-bold'}>视频信息</span>
+              <span>宽度：{playerMeta.videoInfo()!.width}</span>
+              <span>高度：{playerMeta.videoInfo()!.height}</span>
+            </div>
+          </div>
+        </Show>
         <div
           class={
             'absolute bottom-0 left-0 w-full p-4 bg-gradient-to-b from-transparent to-base-content flex justify-between'
@@ -100,6 +114,15 @@ const Controls: Component<Props> = (props) => {
             </div>
           </div>
           <div class={'flex gap-2 items-center'}>
+            <span
+              class={'iconify ph--info-bold text-xl cursor-pointer'}
+              classList={{
+                inline: !!playerMeta.videoInfo(),
+                hidden: !playerMeta.videoInfo(),
+              }}
+              onMouseEnter={() => setShowInfo(true)}
+              onMouseLeave={() => setShowInfo(false)}
+            />
             <Menu
               items={playerMeta
                 .liveUrls()
