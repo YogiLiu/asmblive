@@ -1,8 +1,8 @@
-import { Component, For, Show } from 'solid-js'
-import { useRoomSelector } from '../../hooks/roomSelector'
+import { Component, createSignal, For, Show } from 'solid-js'
 import { A } from '@solidjs/router'
 import RoomBtn from './RoomBtn'
 import { BoardRoom, Room } from '../../service/types'
+import RoomSelector from '../RoomSelector'
 
 type Props = {
   rooms: BoardRoom[]
@@ -13,9 +13,13 @@ type Props = {
 }
 
 const RoomList: Component<Props> = (props) => {
-  const [roomGetter, setShow] = useRoomSelector((room) => {
-    props.onAdd(room)
-  })
+  const [show, setShow] = createSignal(false)
+  const selectHandler = (room: Room | null) => {
+    if (room !== null) {
+      props.onAdd(room)
+    }
+    setShow(false)
+  }
   const deleteHandler = (room: Room) => props.onRemove(room)
   return (
     <div class={'p-1 absolute top-0 left-0'}>
@@ -49,7 +53,7 @@ const RoomList: Component<Props> = (props) => {
           <span class={'iconify ph--plus-bold'}> </span>
         </button>
       </div>
-      {roomGetter}
+      <RoomSelector onSelect={selectHandler} show={show()} />
     </div>
   )
 }
