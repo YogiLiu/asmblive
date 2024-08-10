@@ -27,8 +27,8 @@ func main() {
 
 	err := wails.Run(&options.App{
 		Title:  "Asmblive",
-		Width:  1024,
-		Height: 768,
+		Width:  1440,
+		Height: 840,
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},
