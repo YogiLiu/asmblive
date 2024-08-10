@@ -7,8 +7,12 @@ import (
 	"net/http"
 )
 
-const corsHeadersPrefix = "access-control-"
-const originKey = "origin"
+const (
+	corsHeadersPrefix = "access-control-"
+	originKey         = "origin"
+)
+
+const bufferSize = 32 * 1024 // 32 KB
 
 type corsProxy struct {
 	log *slog.Logger
@@ -41,7 +45,9 @@ func (c corsProxy) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	}
 	defer func() {
 		err = res.Body.Close()
-		c.log.Error("failed to close response body", "error", err)
+		if err != nil {
+			c.log.Error("failed to close response body", "error", err)
+		}
 	}()
 	for key, values := range res.Header {
 		// remove cors response headers
@@ -53,7 +59,7 @@ func (c corsProxy) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		}
 	}
 	w.WriteHeader(res.StatusCode)
-	l, err := io.Copy(w, res.Body)
+	l, err := io.CopyBuffer(w, res.Body, make([]byte, bufferSize))
 	if err != nil {
 		c.log.Error("failed to copy response body", "error", err)
 	} else {
