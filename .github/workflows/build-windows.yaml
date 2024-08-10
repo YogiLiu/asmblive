@@ -36,15 +36,15 @@ jobs:
       - name: Build app
         shell: bash
         run: |
-          wails build -o asmblive_${{ steps.normalise_platform.outputs.tag }}
-          wails build -debug -o asmblive_${{ steps.normalise_platform.outputs.tag }}_debug
+          wails build -o asmblive_${{ steps.normalise_platform.outputs.tag }}.exe
+          wails build -debug -o asmblive_${{ steps.normalise_platform.outputs.tag }}_debug.exe
       - name: Upload release artifact
         uses: actions/upload-artifact@v4
         with:
-          name: asmblive_${{ steps.normalise_platform.outputs.tag }}
-          path: build/bin/asmblive_${{ steps.normalise_platform.outputs.tag }}
+          name: asmblive_${{ steps.normalise_platform.outputs.tag }}.exe
+          path: build/bin/asmblive_${{ steps.normalise_platform.outputs.tag }}.exe
       - name: Upload debug artifact
         uses: actions/upload-artifact@v4
         with:
-          name: asmblive_${{ steps.normalise_platform.outputs.tag }}_debug
-          path: build/bin/asmblive_${{ steps.normalise_platform.outputs.tag }}_debug
+          name: asmblive_${{ steps.normalise_platform.outputs.tag }}_debug.exe
+          path: build/bin/asmblive_${{ steps.normalise_platform.outputs.tag }}_debug.exe
