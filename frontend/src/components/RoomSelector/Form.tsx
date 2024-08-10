@@ -53,7 +53,7 @@ const Form: Component<{ onSubmit: (args: [string, string]) => void }> = (
                 <input
                   name={'roomId'}
                   type={'text'}
-                  class={'outline-none flex-grow'}
+                  class={'outline-none flex-grow bg-transparent'}
                   placeholder={`请输入${platform.name}房间号`}
                   maxLength={32}
                   autofocus={true}

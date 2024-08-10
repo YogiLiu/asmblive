@@ -60,7 +60,7 @@ const Controls: Component<Props> = (props) => {
           <div class={'w-full h-full flex justify-center items-center'}>
             <div
               class={
-                'rounded-box px-4 py-2 bg-base-content bg-opacity-90 flex flex-col gap-1'
+                'rounded-box px-4 py-2 bg-zinc-800 text-zinc-50 bg-opacity-90 flex flex-col gap-1'
               }
             >
               <span class={'font-bold'}>视频信息</span>
@@ -71,7 +71,7 @@ const Controls: Component<Props> = (props) => {
         </Show>
         <div
           class={
-            'absolute bottom-0 left-0 w-full p-4 bg-gradient-to-b from-transparent to-base-content flex justify-between'
+            'absolute bottom-0 left-0 w-full p-4 bg-gradient-to-b from-transparent to-zinc-800 text-zinc-50 flex justify-between'
           }
           onMouseEnter={() => setCanClose(false)}
           onMouseLeave={() => setCanClose(true)}
@@ -180,7 +180,7 @@ const Menu: Component<MenuProps> = (props) => {
         <span class={'cursor-pointer font-bold'}>{selectedName()}</span>
         <div
           class={
-            'absolute left-0 -top-32 h-32 overflow-auto noscrollbar w-16 hidden group-hover:flex flex-col gap-2 bg-base-content text-base-100 bg-opacity-90 rounded p-2'
+            'absolute left-0 -top-32 h-32 overflow-auto noscrollbar w-16 hidden group-hover:flex flex-col gap-2 bg-zinc-800 text-zinc-50 bg-opacity-90 rounded p-2'
           }
         >
           <For each={props.items}>

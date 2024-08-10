@@ -45,7 +45,7 @@ const PlayerWrapper: Component<Props> = (props) => {
         <Show when={props.room}>
           <div
             class={
-              'absolute top-0 left-0 !h-fit bg-gradient-to-t from-transparent to-base-content text-base-100 pb-6 pt-2 px-2 flex items-center gap-2'
+              'absolute top-0 left-0 !h-fit bg-gradient-to-t from-transparent to-zinc-800 text-zinc-50 pb-6 pt-2 px-2 flex items-center gap-2'
             }
             classList={{
               hidden: !showInfo(),
@@ -58,13 +58,13 @@ const PlayerWrapper: Component<Props> = (props) => {
               </div>
               <img
                 class={
-                  'absolute bottom-0 right-0 !w-5 !h-5 rounded-full bg-base-100 p-1'
+                  'absolute bottom-0 right-0 !w-5 !h-5 rounded-full bg-zinc-50 p-1'
                 }
                 src={props.room.platform.iconUrl}
                 alt={'platform'}
               />
             </div>
-            <div>{props.room.owner.name}</div>
+            <div class={'font-bold'}>{props.room.owner.name}</div>
           </div>
         </Show>
       </Suspense>
