@@ -12,7 +12,7 @@ import { getRoom } from '../../service/platform'
 import { Portal } from 'solid-js/web'
 
 const minTimeout = 30000 // 30 seconds
-const maxTimeout = 60000 // 60 seconds
+const maxTimeout = 120000 // 120 seconds
 
 function getRandomRefetchTimeout(): number {
   return Math.floor(Math.random() * (maxTimeout - minTimeout + 1)) + minTimeout
