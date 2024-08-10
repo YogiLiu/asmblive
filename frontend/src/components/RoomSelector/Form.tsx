@@ -28,6 +28,7 @@ const Form: Component<{ onSubmit: (args: [string, string]) => void }> = (
               class={'tab'}
               onClick={() => setTab(idx())}
               classList={{ 'tab-active': tab() === idx() }}
+              title={platform.name}
             >
               <img
                 class={'w-4 h-4'}
