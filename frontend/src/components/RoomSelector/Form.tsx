@@ -40,7 +40,7 @@ const Form: Component<{ onSubmit: (args: [string, string]) => void }> = (
             <div
               role={'tabpanel'}
               class={
-                'tab-content rounded-box border border-base-300 px-4 py-2 col-span-10'
+                'tab-content rounded-lg border border-base-300 px-4 py-2 col-span-10'
               }
             >
               <form class={'flex'} onSubmit={submitHandler}>
