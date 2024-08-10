@@ -40,9 +40,16 @@ jobs:
           version: 9
       - name: Build app
         shell: bash
-        run: wails build -o asmblive_${{ steps.normalise_platform.outputs.tag }}
-      - name: Upload artifact
+        run: |
+          wails build -o asmblive_${{ steps.normalise_platform.outputs.tag }}
+          wails build -debug -o asmblive_${{ steps.normalise_platform.outputs.tag }}_debug
+      - name: Upload release artifact
         uses: actions/upload-artifact@v4
         with:
           name: asmblive_${{ steps.normalise_platform.outputs.tag }}
           path: build/bin/asmblive_${{ steps.normalise_platform.outputs.tag }}
+      - name: Upload debug artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: asmblive_${{ steps.normalise_platform.outputs.tag }}_debug
+          path: build/bin/asmblive_${{ steps.normalise_platform.outputs.tag }}_debug
