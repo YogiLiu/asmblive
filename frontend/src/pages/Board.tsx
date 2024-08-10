@@ -137,7 +137,7 @@ const Board: Component = () => {
               onKeyPress={handleEscape}
             >
               <input
-                class={'outline-none'}
+                class={'outline-none bg-transparent'}
                 name={'name'}
                 value={board()!.name}
                 minLength={1}
