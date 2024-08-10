@@ -43,7 +43,7 @@ jobs:
           mkdir -p build/bin
           wails build -o build/bin/asmblive_${{ steps.normalise_platform.outputs.tag }}
       - name: Upload artifact
-        uses: @actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4
         with:
           name: asmblive_${{ steps.normalise_platform.outputs.tag }}
           path: build/bin/asmblive_${{ steps.normalise_platform.outputs.tag }}
