@@ -23,15 +23,21 @@ type Server interface {
 
 	// BaseUrl returns the base URL of the server, it is valid after Start.
 	BaseUrl() url.URL
+
+	// GetCorsProxyUrl returns the proxy URL for remove CORS limination.
+	GetCorsProxyUrl(oringin url.URL) url.URL
 }
 
 func New(log *slog.Logger) Server {
 	log = log.With("module", "server")
 	return &server{
-		log: log,
-		hfs: make(map[string]http.HandlerFunc),
+		log:              log,
+		hfs:              make(map[string]http.HandlerFunc),
+		corsProxyHandler: corsProxy{log: log.With("module", "server/cors")},
 	}
 }
+
+const corsPath = "/cors"
 
 // server is the implementation of Server.
 type server struct {
@@ -39,7 +45,8 @@ type server struct {
 	srv     *http.Server
 	baseUrl url.URL
 
-	hfs map[string]http.HandlerFunc
+	hfs              map[string]http.HandlerFunc
+	corsProxyHandler http.Handler
 }
 
 func (s *server) BaseUrl() url.URL {
@@ -58,6 +65,9 @@ func (s *server) Start() error {
 	for pattern, hf := range s.hfs {
 		sm.Handle(pattern, hf)
 	}
+	// add cors handler
+	sm.Handle(corsPath, s.corsProxyHandler)
+
 	s.srv = &http.Server{Handler: sm}
 	s.log.Info("server started", "addr", l.Addr())
 	go func() {
@@ -80,4 +90,16 @@ func (s *server) Stop(ctx context.Context) error {
 
 func (s *server) AddHandler(pattern string, hf http.HandlerFunc) {
 	s.hfs[pattern] = hf
+}
+
+func (s *server) GetCorsProxyUrl(origin url.URL) url.URL {
+	u := url.URL{
+		Scheme: "http",
+		Host:   s.baseUrl.Host,
+		Path:   corsPath,
+	}
+	q := u.Query()
+	q.Set(originKey, origin.String())
+	u.RawQuery = q.Encode()
+	return u
 }
