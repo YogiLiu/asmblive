@@ -1,10 +1,6 @@
 import { cache } from '@solidjs/router'
 import { LiveUrl, Quality, Room } from '../../../service/types'
-import { getLiveUrls, getQualities, getRoom } from '../../../service/platform'
-
-export const cachedGetRoom = cache(async (room: Room): Promise<Room> => {
-  return getRoom(room.platform.id, room.id)
-}, 'getRoom')
+import { getLiveUrls, getQualities } from '../../../service/platform'
 
 export const cachedGetQualities = cache(
   async (room?: Room): Promise<Quality[]> => {

@@ -136,8 +136,7 @@ func (b Bili) GetLiveUrls(ctx context.Context, roomId string, qualityId string) 
 					if err != nil {
 						continue
 					}
-					pu := b.srv.GetCorsProxyUrl(*u)
-					urls = append(urls, pu)
+					urls = append(urls, *u)
 				}
 			}
 		}
@@ -147,7 +146,11 @@ func (b Bili) GetLiveUrls(ctx context.Context, roomId string, qualityId string) 
 		u := urls[i]
 		return !strings.Contains(u.Host, "mcdn")
 	})
-	return urls, nil
+	pus := make([]url.URL, len(urls))
+	for i, u := range urls {
+		pus[i] = b.srv.GetCorsProxyUrl(u)
+	}
+	return pus, nil
 }
 
 func (b Bili) getRoomPlayInfo(ctx context.Context, roomId string, qualityId string) (*roomPlayInfo, error) {

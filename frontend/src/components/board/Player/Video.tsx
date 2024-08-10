@@ -37,8 +37,8 @@ const Video: Component<Props> = (props) => {
     if (!videoRef) {
       return
     }
-    const u = new URL(playerMeta.selectedLiveUrl()!.url)
-    if (!u.pathname.endsWith('m3u8')) {
+    // TODO: should have a better way to check the url is m3u8 or not
+    if (!playerMeta.selectedLiveUrl()!.url.includes('m3u8')) {
       videoRef.src = playerMeta.selectedLiveUrl()!.url
       return
     }

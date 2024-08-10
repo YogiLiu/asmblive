@@ -9,8 +9,11 @@ import {
 export const getRoom = async (
   platfomtId: string,
   roomId: string,
-): Promise<Room> => {
+): Promise<Room | null> => {
   const r = await GetRoom(platfomtId, roomId)
+  if (!r) {
+    return r
+  }
   return {
     id: r.id,
     title: r.title,
