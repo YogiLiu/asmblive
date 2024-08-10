@@ -151,7 +151,7 @@ const Board: Component = () => {
         </label>
         <div
           class={
-            'w-full h-[calc(100vh-4.5rem)] overflow-scroll grid content-start gap-2'
+            'w-full h-[calc(100vh-4.5rem)] overflow-auto grid auto-rows-min content-start gap-2'
           }
           classList={{
             'grid-cols-1': selectedRooms().length <= 1,
