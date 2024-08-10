@@ -22,7 +22,7 @@ const Home: Component = () => {
     initialValue: '',
   })
   return (
-    <div class={'h-screen overflow-scroll flex flex-col'}>
+    <div class={'h-screen overflow-auto flex flex-col'}>
       <div
         class={
           'flex-grow m-6 *:w-24 *:h-24 grid grid-cols-[repeat(auto-fill,minmax(6rem,1fr))] content-start gap-4'

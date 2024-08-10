@@ -2,13 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
-.noscrollbar::-webkit-scrollbar {
-  display: none;
-  scrollbar-width: none;
-}
+@layer utilities {
+  .noscrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
 
-/* disable drag for img, link */
-img,
-a {
-  -webkit-user-drag: none;
+  .noscrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* disable drag for img, link */
+  img,
+  a {
+    -webkit-user-drag: none;
+  }
 }
