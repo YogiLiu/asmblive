@@ -2,6 +2,7 @@ package bili
 
 import (
 	"asmblive/internal/platform"
+	"asmblive/internal/server"
 	"asmblive/internal/setting"
 	"context"
 	"fmt"
@@ -15,16 +16,18 @@ import (
 
 type Bili struct {
 	log *slog.Logger
+	srv server.Server
 	pc  platform.Client
 	st  *setting.Bili
 }
 
-func NewBili(l *slog.Logger, c platform.Client, s *setting.Bili) *Bili {
-	l = l.With("module", "platform/bili")
+func NewBili(log *slog.Logger, pc platform.Client, st *setting.Bili, srv server.Server) *Bili {
+	log = log.With("module", "platform/bili")
 	return &Bili{
-		log: l,
-		pc:  c,
-		st:  s,
+		log: log,
+		pc:  pc,
+		st:  st,
+		srv: srv,
 	}
 }
 
@@ -37,11 +40,12 @@ func (b Bili) Name() string {
 }
 
 func (b Bili) IconUrl() url.URL {
-	return url.URL{
+	u := url.URL{
 		Scheme: "https",
 		Host:   "www.bilibili.com",
 		Path:   "/favicon.ico",
 	}
+	return b.srv.GetCorsProxyUrl(u)
 }
 
 func (b Bili) GetRoom(ctx context.Context, roomId string) (platform.Room, error) {
@@ -66,19 +70,21 @@ func (b Bili) GetRoom(ctx context.Context, roomId string) (platform.Room, error)
 	if err != nil {
 		return platform.Room{}, ErrGetRoom(fmt.Errorf("failed to parse cover url: %w", err))
 	}
+	pCu := b.srv.GetCorsProxyUrl(*cu)
 	au, err := url.Parse(rd.AnchorInfo.BaseInfo.Face)
 	if err != nil {
 		return platform.Room{}, ErrGetRoom(fmt.Errorf("failed to parse avatar url: %w", err))
 	}
+	pAu := b.srv.GetCorsProxyUrl(*au)
 	return platform.Room{
 		Id:       strconv.FormatInt(rd.RoomInfo.RoomId, 10),
 		Title:    rd.RoomInfo.Title,
 		IsOnline: rd.RoomInfo.LiveStatus == 1,
-		CoverUrl: *cu,
+		CoverUrl: pCu,
 		Owner: platform.Owner{
 			Id:        strconv.FormatInt(rd.RoomInfo.Uid, 10),
 			Name:      rd.AnchorInfo.BaseInfo.Uname,
-			AvatarUrl: *au,
+			AvatarUrl: pAu,
 		},
 	}, nil
 }
@@ -130,7 +136,8 @@ func (b Bili) GetLiveUrls(ctx context.Context, roomId string, qualityId string) 
 					if err != nil {
 						continue
 					}
-					urls = append(urls, *u)
+					pu := b.srv.GetCorsProxyUrl(*u)
+					urls = append(urls, pu)
 				}
 			}
 		}
@@ -138,10 +145,7 @@ func (b Bili) GetLiveUrls(ctx context.Context, roomId string, qualityId string) 
 	// ensure mcdn urls are at the end
 	sort.Slice(urls, func(i int, _ int) bool {
 		u := urls[i]
-		if strings.Contains(u.Host, "mcdn") {
-			return false
-		}
-		return true
+		return !strings.Contains(u.Host, "mcdn")
 	})
 	return urls, nil
 }

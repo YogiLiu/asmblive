@@ -1,7 +1,9 @@
 package main
 
 import (
+	"asmblive/internal/server"
 	"asmblive/internal/service"
+	"context"
 	"embed"
 	"log/slog"
 	"os"
@@ -21,9 +23,24 @@ func main() {
 	log := slog.New(hdl)
 	log = log.With("version", vs.GetVersion())
 
-	sSrv := service.NewSettingService(log)
-	pfSrv, pfSu, pfSd := service.NewPlatformService(log, sSrv)
-	bSrv := service.NewBoardService(log)
+	sv := server.New(log)
+
+	stSrv := service.NewSettingService(log)
+	pfSrv := service.NewPlatformService(log, stSrv, sv)
+	bSrv := service.NewBoardService(log, sv)
+
+	startup := func(ctx context.Context) {
+		if err := sv.Start(); err != nil {
+			log.Error("failed to start server", "err", err)
+			panic(err)
+		}
+	}
+	shutdown := func(ctx context.Context) {
+		if err := sv.Stop(ctx); err != nil {
+			log.Error("failed to stop server", "err", err)
+			panic(err)
+		}
+	}
 
 	err := wails.Run(&options.App{
 		Title:  "Asmblive",
@@ -33,13 +50,13 @@ func main() {
 			Assets: assets,
 		},
 		BackgroundColour: options.NewRGB(255, 255, 255),
-		OnStartup:        pfSu,
-		OnShutdown:       pfSd,
+		OnStartup:        startup,
+		OnShutdown:       shutdown,
 		Bind: []interface{}{
 			vs,
 			pfSrv,
 			bSrv,
-			sSrv,
+			stSrv,
 		},
 		Logger: logger{log: log.With("module", "wails")},
 		DragAndDrop: &options.DragAndDrop{

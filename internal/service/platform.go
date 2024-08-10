@@ -10,38 +10,23 @@ import (
 
 type PlatformService struct {
 	log *slog.Logger
-	srv server.Server
 	pm  map[string]platform.Platform
 }
 
-func NewPlatformService(log *slog.Logger, setting *SettingService) (*PlatformService, StartupFunc, ShutdownFunc) {
+func NewPlatformService(log *slog.Logger, setting *SettingService, srv server.Server) *PlatformService {
 	log = log.With("module", "service/platform")
-	srv := server.New(log)
 	c := platform.NewClient(log, platform.Headers{})
 
 	pm := make(map[string]platform.Platform)
 	// bilibili
-	bl := bili.NewBili(log, c, &setting.Bili)
+	bl := bili.NewBili(log, c, &setting.Bili, srv)
 	pm[bl.Id()] = bl
 
 	s := &PlatformService{
 		log: log,
-		srv: srv,
 		pm:  pm,
 	}
-	startup := func(ctx context.Context) {
-		if err := srv.Start(); err != nil {
-			log.Error("failed to start server", "err", err)
-			panic(err)
-		}
-	}
-	shutdown := func(ctx context.Context) {
-		if err := srv.Stop(ctx); err != nil {
-			log.Error("failed to stop server", "err", err)
-			panic(err)
-		}
-	}
-	return s, startup, shutdown
+	return s
 }
 
 func (s PlatformService) GetPlatforms() []*PlatformDto {

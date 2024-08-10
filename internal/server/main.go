@@ -25,7 +25,7 @@ type Server interface {
 	BaseUrl() url.URL
 
 	// GetCorsProxyUrl returns the proxy URL for remove CORS limination.
-	GetCorsProxyUrl(oringin url.URL) url.URL
+	GetCorsProxyUrl(origin url.URL) url.URL
 }
 
 func New(log *slog.Logger) Server {

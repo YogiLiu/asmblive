@@ -2,9 +2,10 @@ package service
 
 import (
 	"errors"
-	"github.com/stretchr/testify/assert"
 	"log/slog"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 type mockStore struct {
@@ -34,23 +35,27 @@ func TestBoardService_GetBoards(t *testing.T) {
 			fields: fields{s: mockStore{read: func() ([]BoardDTO, error) {
 				return []BoardDTO{
 					{
-						Id:   "1",
-						Name: "board1",
+						Id:    "1",
+						Name:  "board1",
+						Rooms: make([]BoardRoomDTO, 0),
 					},
 					{
-						Id:   "2",
-						Name: "board2",
+						Id:    "2",
+						Name:  "board2",
+						Rooms: make([]BoardRoomDTO, 0),
 					},
 				}, nil
 			}}},
 			want: []BoardDTO{
 				{
-					Id:   "1",
-					Name: "board1",
+					Id:    "1",
+					Name:  "board1",
+					Rooms: make([]BoardRoomDTO, 0),
 				},
 				{
-					Id:   "2",
-					Name: "board2",
+					Id:    "2",
+					Name:  "board2",
+					Rooms: make([]BoardRoomDTO, 0),
 				},
 			},
 		},
@@ -68,7 +73,7 @@ func TestBoardService_GetBoards(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			s := BoardService{
 				log: slog.Default(),
-				s:   tt.fields.s,
+				st:  tt.fields.s,
 			}
 			assert.Equal(t, tt.want, s.GetBoards())
 		})
@@ -94,19 +99,22 @@ func TestBoardService_GetBoard(t *testing.T) {
 			fields: fields{s: mockStore{read: func() ([]BoardDTO, error) {
 				return []BoardDTO{
 					{
-						Id:   "1",
-						Name: "board1",
+						Id:    "1",
+						Name:  "board1",
+						Rooms: make([]BoardRoomDTO, 0),
 					},
 					{
-						Id:   "2",
-						Name: "board2",
+						Id:    "2",
+						Name:  "board2",
+						Rooms: make([]BoardRoomDTO, 0),
 					},
 				}, nil
 			}}},
 			args: args{bId: "1"},
 			want: &BoardDTO{
-				Id:   "1",
-				Name: "board1",
+				Id:    "1",
+				Name:  "board1",
+				Rooms: make([]BoardRoomDTO, 0),
 			},
 		},
 		{
@@ -131,7 +139,7 @@ func TestBoardService_GetBoard(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			s := BoardService{
 				log: slog.Default(),
-				s:   tt.fields.s,
+				st:  tt.fields.s,
 			}
 			assert.Equal(t, tt.want, s.GetBoard(tt.args.bId))
 		})
@@ -158,14 +166,15 @@ func TestBoardService_AddBoard(t *testing.T) {
 					return []BoardDTO{}, nil
 				},
 				write: func(bs []BoardDTO) error {
-					assert.Equal(t, []BoardDTO{{Id: "1", Name: "board1"}}, bs)
+					assert.Equal(t, []BoardDTO{{Id: "1", Name: "board1", Rooms: make([]BoardRoomDTO, 0)}}, bs)
 					return nil
 				},
 			}},
-			args: args{b: BoardDTO{Id: "1", Name: "board1"}},
+			args: args{b: BoardDTO{Id: "1", Name: "board1", Rooms: make([]BoardRoomDTO, 0)}},
 			want: &BoardDTO{
-				Id:   "1",
-				Name: "board1",
+				Id:    "1",
+				Name:  "board1",
+				Rooms: make([]BoardRoomDTO, 0),
 			},
 		},
 		{
@@ -175,7 +184,7 @@ func TestBoardService_AddBoard(t *testing.T) {
 					return nil, errors.New("error")
 				},
 			}},
-			args: args{b: BoardDTO{Id: "1", Name: "board1"}},
+			args: args{b: BoardDTO{Id: "1", Name: "board1", Rooms: make([]BoardRoomDTO, 0)}},
 			want: nil,
 		},
 		{
@@ -185,7 +194,7 @@ func TestBoardService_AddBoard(t *testing.T) {
 					return []BoardDTO{}, nil
 				},
 				write: func(bs []BoardDTO) error {
-					assert.Equal(t, []BoardDTO{{Id: "1", Name: "board1"}}, bs)
+					assert.Equal(t, []BoardDTO{{Id: "1", Name: "board1", Rooms: make([]BoardRoomDTO, 0)}}, bs)
 					return errors.New("error")
 				},
 			}},
@@ -197,7 +206,7 @@ func TestBoardService_AddBoard(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			s := BoardService{
 				log: slog.Default(),
-				s:   tt.fields.s,
+				st:  tt.fields.s,
 			}
 			assert.Equal(t, tt.want, s.AddBoard(tt.args.b))
 		})
@@ -223,27 +232,30 @@ func TestBoardService_RemoveBoard(t *testing.T) {
 				read: func() ([]BoardDTO, error) {
 					return []BoardDTO{
 						{
-							Id:   "1",
-							Name: "board1",
+							Id:    "1",
+							Name:  "board1",
+							Rooms: make([]BoardRoomDTO, 0),
 						},
 						{
-							Id:   "2",
-							Name: "board2",
+							Id:    "2",
+							Name:  "board2",
+							Rooms: make([]BoardRoomDTO, 0),
 						},
 					}, nil
 				},
 				write: func(bs []BoardDTO) error {
 					assert.Equal(t, []BoardDTO{
 						{
-							Id:   "2",
-							Name: "board2",
+							Id:    "2",
+							Name:  "board2",
+							Rooms: make([]BoardRoomDTO, 0),
 						},
 					}, bs)
 					return nil
 				},
 			}},
 			args: args{bId: "1"},
-			want: &BoardDTO{Id: "1", Name: "board1"},
+			want: &BoardDTO{Id: "1", Name: "board1", Rooms: make([]BoardRoomDTO, 0)},
 		},
 		{
 			name:   "should return nil since read error",
@@ -257,12 +269,14 @@ func TestBoardService_RemoveBoard(t *testing.T) {
 				read: func() ([]BoardDTO, error) {
 					return []BoardDTO{
 						{
-							Id:   "1",
-							Name: "board1",
+							Id:    "1",
+							Name:  "board1",
+							Rooms: make([]BoardRoomDTO, 0),
 						},
 						{
-							Id:   "2",
-							Name: "board2",
+							Id:    "2",
+							Name:  "board2",
+							Rooms: make([]BoardRoomDTO, 0),
 						},
 					}, nil
 				},
@@ -279,12 +293,14 @@ func TestBoardService_RemoveBoard(t *testing.T) {
 				read: func() ([]BoardDTO, error) {
 					return []BoardDTO{
 						{
-							Id:   "1",
-							Name: "board1",
+							Id:    "1",
+							Name:  "board1",
+							Rooms: make([]BoardRoomDTO, 0),
 						},
 						{
-							Id:   "2",
-							Name: "board2",
+							Id:    "2",
+							Name:  "board2",
+							Rooms: make([]BoardRoomDTO, 0),
 						},
 					}, nil
 				},
@@ -300,7 +316,7 @@ func TestBoardService_RemoveBoard(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			s := BoardService{
 				log: slog.Default(),
-				s:   tt.fields.s,
+				st:  tt.fields.s,
 			}
 			assert.Equal(t, tt.want, s.RemoveBoard(tt.args.bId))
 		})
@@ -323,9 +339,11 @@ func TestBoardService_UpdateBoard(t *testing.T) {
 		{
 			name: "should return board",
 			fields: fields{s: mockStore{
-				read: func() ([]BoardDTO, error) { return []BoardDTO{{Id: "1", Name: "board1"}}, nil },
+				read: func() ([]BoardDTO, error) {
+					return []BoardDTO{{Id: "1", Name: "board1", Rooms: make([]BoardRoomDTO, 0)}}, nil
+				},
 				write: func(bs []BoardDTO) error {
-					assert.Equal(t, []BoardDTO{{Id: "1", Name: "newBoard1"}}, bs)
+					assert.Equal(t, []BoardDTO{{Id: "1", Name: "newBoard1", Rooms: make([]BoardRoomDTO, 0)}}, bs)
 					return nil
 				},
 			}},
@@ -340,9 +358,11 @@ func TestBoardService_UpdateBoard(t *testing.T) {
 		{
 			name: "should return nil since write error",
 			fields: fields{s: mockStore{
-				read: func() ([]BoardDTO, error) { return []BoardDTO{{Id: "1", Name: "board1"}}, nil },
+				read: func() ([]BoardDTO, error) {
+					return []BoardDTO{{Id: "1", Name: "board1", Rooms: make([]BoardRoomDTO, 0)}}, nil
+				},
 				write: func(bs []BoardDTO) error {
-					assert.Equal(t, []BoardDTO{{Id: "1", Name: "newBoard1"}}, bs)
+					assert.Equal(t, []BoardDTO{{Id: "1", Name: "newBoard1", Rooms: make([]BoardRoomDTO, 0)}}, bs)
 					return errors.New("error")
 				},
 			}},
@@ -360,7 +380,7 @@ func TestBoardService_UpdateBoard(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			s := BoardService{
 				log: slog.Default(),
-				s:   tt.fields.s,
+				st:  tt.fields.s,
 			}
 			assert.Equalf(t, tt.want, s.UpdateBoard(tt.args.nb), "UpdateBoard(%v)", tt.args.nb)
 		})
