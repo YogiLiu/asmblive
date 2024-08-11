@@ -51,7 +51,10 @@ jobs:
           echo "arg=-${{ matrix.mode }}" >> "$GITHUB_OUTPUT"
       - name: Set version
         shell: bash
-        run: jq ".info.productVersion = $(jq '.commitizen.version' .cz.json)" wails.json > wails.copy.json && mv wails.copy.json wails.json
+        run: |
+          version=$(jq '.commitizen.version' .cz.json)
+          jq ".info.productVersion = $version" wails.json > wails.copy.json
+          mv wails.copy.json wails.json
 
       # Linux
       - name: Install Linux prerequisites
@@ -106,9 +109,15 @@ jobs:
         if: startsWith(matrix.build.platform, 'darwin')
         shell: bash
         run: chmod +x build/bin/asmblive.app/Contents/MacOS/asmblive
+      - name: Package MacOS ${{ matrix.mode }} App
+        if: startsWith(matrix.build.platform, 'darwin')
+        shell: bash
+        run: |
+          pkgbuild --analyze --root build/bin/asmblive.app build/bin/components.plist
+          pkgbuild --root build/bin/asmblive.app --component-plist build/bin/components.plist --install-location /Applications build/bin/asmblive_${{ steps.normalise_platform.outputs.tag }}${{ steps.set_debug.outputs.suffix }}.pkg
       - name: Upload MacOS ${{ matrix.mode }} artifact
         if: startsWith(matrix.build.platform, 'darwin')
         uses: actions/upload-artifact@v4
         with:
-          name: asmblive_${{ steps.normalise_platform.outputs.tag }}${{ steps.set_debug.outputs.suffix }}
-          path: build/bin/asmblive.app/
+          name: asmblive_${{ steps.normalise_platform.outputs.tag }}${{ steps.set_debug.outputs.suffix }}.pkg
+          path: build/bin/asmblive_${{ steps.normalise_platform.outputs.tag }}${{ steps.set_debug.outputs.suffix }}.pkg
