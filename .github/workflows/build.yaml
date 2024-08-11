@@ -106,13 +106,9 @@ jobs:
         if: startsWith(matrix.build.platform, 'darwin')
         shell: bash
         run: chmod +x build/bin/asmblive.app/Contents/MacOS/asmblive
-      - name: Package MacOS ${{ matrix.mode }} App
-        if: startsWith(matrix.build.platform, 'darwin')
-        shell: bash
-        run: productbuild --component build/bin/asmblive.app /Applications build/bin/asmblive_${{ steps.normalise_platform.outputs.tag }}${{ steps.set_debug.outputs.suffix }}.pkg
       - name: Upload MacOS ${{ matrix.mode }} artifact
         if: startsWith(matrix.build.platform, 'darwin')
         uses: actions/upload-artifact@v4
         with:
-          name: asmblive_${{ steps.normalise_platform.outputs.tag }}${{ steps.set_debug.outputs.suffix }}.pkg
-          path: build/bin/asmblive_${{ steps.normalise_platform.outputs.tag }}${{ steps.set_debug.outputs.suffix }}.pkg
+          name: asmblive_${{ steps.normalise_platform.outputs.tag }}${{ steps.set_debug.outputs.suffix }}
+          path: build/bin/asmblive.app/
