@@ -126,15 +126,15 @@ jobs:
       - name: Build MacOS debug App
         if: startsWith(matrix.build.platform, 'darwin')
         shell: bash
-        run: wails build -platform ${{ matrix.build.platform }} -debug -o asmblive_${{ steps.normalise_platform.outputs.tag }}_debug
+        run: wails build -platform ${{ matrix.build.platform }} -debug
       - name: Add perms to MacOS debug App
         if: startsWith(matrix.build.platform, 'darwin')
         shell: bash
-        run: chmod +x build/bin/asmblive_${{ steps.normalise_platform.outputs.tag }}_debug/Contents/MacOS/*
+        run: chmod +x build/bin/asmblive.app/Contents/MacOS/asmblive
       - name: Package MacOS debug App
         if: startsWith(matrix.build.platform, 'darwin')
         shell: bash
-        run: productbuild --component build/bin/asmblive_${{ steps.normalise_platform.outputs.tag }}_debug.app build/bin/asmblive_${{ steps.normalise_platform.outputs.tag }}_debug.pkg
+        run: productbuild --component build/bin/asmblive.app build/bin/asmblive_${{ steps.normalise_platform.outputs.tag }}_debug.pkg
       - name: Upload MacOS debug artifact
         if: startsWith(matrix.build.platform, 'darwin')
         uses: actions/upload-artifact@v4
@@ -146,15 +146,15 @@ jobs:
       - name: Build MacOS production App
         if: startsWith(matrix.build.platform, 'darwin')
         shell: bash
-        run: wails build -platform ${{ matrix.build.platform }} -o asmblive_${{ steps.normalise_platform.outputs.tag }}
+        run: wails build -platform ${{ matrix.build.platform }}
       - name: Add perms to MacOS production App
         if: startsWith(matrix.build.platform, 'darwin')
         shell: bash
-        run: chmod +x build/bin/asmblive_${{ steps.normalise_platform.outputs.tag }}/Contents/MacOS/*
+        run: chmod +x build/bin/asmblive.app/Contents/MacOS/asmblive
       - name: Package MacOS production App
         if: startsWith(matrix.build.platform, 'darwin')
         shell: bash
-        run: productbuild --component build/bin/asmblive_${{ steps.normalise_platform.outputs.tag }}.app build/bin/asmblive_${{ steps.normalise_platform.outputs.tag }}.pkg
+        run: productbuild --component build/bin/asmblive.app build/bin/asmblive_${{ steps.normalise_platform.outputs.tag }}.pkg
       - name: Upload MacOS production artifact
         if: startsWith(matrix.build.platform, 'darwin')
         uses: actions/upload-artifact@v4
