@@ -10,8 +10,6 @@ jobs:
         build:
           - platform: 'linux/amd64'
             os: 'ubuntu-latest'
-          - platform: 'linux/arm64'
-            os: 'ubuntu-latest'
           - platform: 'windows/amd64'
             os: 'windows-latest'
           - platform: 'darwin/universal'
@@ -24,7 +22,7 @@ jobs:
         id: normalise_platform
         shell: bash
         run: |
-          tag=$(echo ${{ matrix.platform }} | sed -e 's/\//_/g')
+          tag=$(echo ${{ matrix.build.platform }} | sed -e 's/\//_/g')
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
       - name: Setup Go
         uses: actions/setup-go@v5
