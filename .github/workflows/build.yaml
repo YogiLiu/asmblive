@@ -1,0 +1,165 @@
+name: Build App
+
+on: [push]
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        build:
+          - platform: 'linux/amd64'
+            os: 'ubuntu-latest'
+          - platform: 'linux/arm64'
+            os: 'ubuntu-latest'
+          - platform: 'windows/amd64'
+            os: 'windows-latest'
+          - platform: 'darwin/universal'
+            os: 'macos-latest'
+    runs-on: ${{ matrix.build.os }}
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+      - name: Normalise platform
+        id: normalise_platform
+        shell: bash
+        run: |
+          tag=$(echo ${{ matrix.platform }} | sed -e 's/\//_/g')
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: stable
+      - name: Install wails
+        shell: bash
+        run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      # Linux Debug
+      - name: Install Linux prerequisites
+        if: startsWith(matrix.build.platform, 'linux')
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev
+      - name: Build Linux debug App
+        if: startsWith(matrix.build.platform, 'linux')
+        shell: bash
+        run: wails build -platform ${{ matrix.build.platform }} -debug -o asmblive_${{ steps.normalise_platform.outputs.tag }}_debug
+      - name: Add perms to Linux debug App
+        if: startsWith(matrix.build.platform, 'linux')
+        shell: bash
+        run: chmod +x build/bin/asmblive_${{ steps.normalise_platform.outputs.tag }}_debug
+      - name: Upload Linux debug artifact
+        if: startsWith(matrix.build.platform, 'linux')
+        uses: actions/upload-artifact@v4
+        with:
+          name: asmblive_${{ steps.normalise_platform.outputs.tag }}_debug
+          path: build/bin/asmblive_${{ steps.normalise_platform.outputs.tag }}_debug
+
+      # Linux Production
+      - name: Build Linux production App
+        if: startsWith(matrix.build.platform, 'linux')
+        shell: bash
+        run: wails build -platform ${{ matrix.build.platform }} -o asmblive_${{ steps.normalise_platform.outputs.tag }}
+      - name: Add perms to Linux production App
+        if: startsWith(matrix.build.platform, 'linux')
+        shell: bash
+        run: chmod +x build/bin/asmblive_${{ steps.normalise_platform.outputs.tag }}
+      - name: Upload Linux production artifact
+        if: startsWith(matrix.build.platform, 'linux')
+        uses: actions/upload-artifact@v4
+        with:
+          name: asmblive_${{ steps.normalise_platform.outputs.tag }}
+          path: build/bin/asmblive_${{ steps.normalise_platform.outputs.tag }}
+
+      # Windows Debug
+      - name: Build Windows debug App
+        if: startsWith(matrix.build.platform, 'windows')
+        shell: bash
+        run: wails build -platform ${{ matrix.build.platform }} -debug -o asmblive_${{ steps.normalise_platform.outputs.tag }}_debug.exe
+      - name: Upload Windows debug artifact
+        if: startsWith(matrix.build.platform, 'windows')
+        uses: actions/upload-artifact@v4
+        with:
+          name: asmblive_${{ steps.normalise_platform.outputs.tag }}_debug.exe
+          path: build/bin/asmblive_${{ steps.normalise_platform.outputs.tag }}_debug.exe
+      - name: Build Windows NSIS debug App
+        if: startsWith(matrix.build.platform, 'windows')
+        shell: bash
+        run: wails build -platform ${{ matrix.build.platform }} -debug -nsis -o asmblive_${{ steps.normalise_platform.outputs.tag }}_debug_setup.exe
+      - name: Upload Windows NSIS debug artifact
+        if: startsWith(matrix.build.platform, 'windows')
+        uses: actions/upload-artifact@v4
+        with:
+          name: asmblive_${{ steps.normalise_platform.outputs.tag }}_debug_setup.exe
+          path: build/bin/asmblive_${{ steps.normalise_platform.outputs.tag }}_debug_setup.exe
+
+      # Windows Production
+      - name: Build Windows production App
+        if: startsWith(matrix.build.platform, 'windows')
+        shell: bash
+        run: wails build -platform ${{ matrix.build.platform }} -o asmblive_${{ steps.normalise_platform.outputs.tag }}.exe
+      - name: Upload Windows production artifact
+        if: startsWith(matrix.build.platform, 'windows')
+        uses: actions/upload-artifact@v4
+        with:
+          name: asmblive_${{ steps.normalise_platform.outputs.tag }}.exe
+          path: build/bin/asmblive_${{ steps.normalise_platform.outputs.tag }}.exe
+      - name: Build Windows NSIS production App
+        if: startsWith(matrix.build.platform, 'windows')
+        shell: bash
+        run: wails build -platform ${{ matrix.build.platform }} -nsis -o asmblive_${{ steps.normalise_platform.outputs.tag }}_setup.exe
+      - name: Upload Windows NSIS production artifact
+        if: startsWith(matrix.build.platform, 'windows')
+        uses: actions/upload-artifact@v4
+        with:
+          name: asmblive_${{ steps.normalise_platform.outputs.tag }}_setup.exe
+          path: build/bin/asmblive_${{ steps.normalise_platform.outputs.tag }}_setup.exe
+
+      # MacOS Debug
+      - name: Build MacOS debug App
+        if: startsWith(matrix.build.platform, 'darwin')
+        shell: bash
+        run: wails build -platform ${{ matrix.build.platform }} -debug -o asmblive_${{ steps.normalise_platform.outputs.tag }}_debug
+      - name: Add perms to MacOS debug App
+        if: startsWith(matrix.build.platform, 'darwin')
+        shell: bash
+        run: chmod +x build/bin/asmblive_${{ steps.normalise_platform.outputs.tag }}_debug/Contents/MacOS/*
+      - name: Package MacOS debug App
+        if: startsWith(matrix.build.platform, 'darwin')
+        shell: bash
+        run: productbuild --component build/bin/asmblive_${{ steps.normalise_platform.outputs.tag }}_debug.app build/bin/asmblive_${{ steps.normalise_platform.outputs.tag }}_debug.pkg
+      - name: Upload MacOS debug artifact
+        if: startsWith(matrix.build.platform, 'darwin')
+        uses: actions/upload-artifact@v4
+        with:
+          name: asmblive_${{ steps.normalise_platform.outputs.tag }}_debug.pkg
+          path: build/bin/asmblive_${{ steps.normalise_platform.outputs.tag }}_debug.pkg
+
+      # MacOS production
+      - name: Build MacOS production App
+        if: startsWith(matrix.build.platform, 'darwin')
+        shell: bash
+        run: wails build -platform ${{ matrix.build.platform }} -o asmblive_${{ steps.normalise_platform.outputs.tag }}
+      - name: Add perms to MacOS production App
+        if: startsWith(matrix.build.platform, 'darwin')
+        shell: bash
+        run: chmod +x build/bin/asmblive_${{ steps.normalise_platform.outputs.tag }}/Contents/MacOS/*
+      - name: Package MacOS production App
+        if: startsWith(matrix.build.platform, 'darwin')
+        shell: bash
+        run: productbuild --component build/bin/asmblive_${{ steps.normalise_platform.outputs.tag }}.app build/bin/asmblive_${{ steps.normalise_platform.outputs.tag }}.pkg
+      - name: Upload MacOS production artifact
+        if: startsWith(matrix.build.platform, 'darwin')
+        uses: actions/upload-artifact@v4
+        with:
+          name: asmblive_${{ steps.normalise_platform.outputs.tag }}.pkg
+          path: build/bin/asmblive_${{ steps.normalise_platform.outputs.tag }}.pkg
