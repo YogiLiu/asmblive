@@ -9,5 +9,9 @@
   "author": {
     "name": "YogiLiu",
     "email": "YogiLiu@outlook.com"
+  },
+  "info": {
+    "copyright": "YogiLiu<YogiLiu@outlook.com>",
+    "comments": "https://github.com/YogiLiu/asmblive"
   }
 }
