@@ -113,8 +113,8 @@ jobs:
         if: startsWith(matrix.build.platform, 'darwin')
         shell: bash
         run: |
-          pkgbuild --analyze --root build/bin/asmblive.app build/bin/components.plist
-          pkgbuild --root build/bin/asmblive.app --component-plist build/bin/components.plist --install-location /Applications build/bin/asmblive_${{ steps.normalise_platform.outputs.tag }}${{ steps.set_debug.outputs.suffix }}.pkg
+          pkgbuild --identifier dev.yogiliu.asmblive --analyze --root build/bin/asmblive.app build/bin/components.plist
+          pkgbuild --identifier dev.yogiliu.asmblive --root build/bin/asmblive.app --component-plist build/bin/components.plist --install-location /Applications build/bin/asmblive_${{ steps.normalise_platform.outputs.tag }}${{ steps.set_debug.outputs.suffix }}.pkg
       - name: Upload MacOS ${{ matrix.mode }} artifact
         if: startsWith(matrix.build.platform, 'darwin')
         uses: actions/upload-artifact@v4
