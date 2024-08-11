@@ -89,16 +89,6 @@ jobs:
         with:
           name: asmblive_${{ steps.normalise_platform.outputs.tag }}${{ steps.set_debug.outputs.suffix }}.exe
           path: build/bin/asmblive_${{ steps.normalise_platform.outputs.tag }}${{ steps.set_debug.outputs.suffix }}.exe
-      - name: Build Windows NSIS ${{ matrix.mode }} App
-        if: startsWith(matrix.build.platform, 'windows')
-        shell: bash
-        run: wails build -clean -platform ${{ matrix.build.platform }} ${{ steps.set_debug.outputs.arg }} -nsis -o asmblive_${{ steps.normalise_platform.outputs.tag }}${{ steps.set_debug.outputs.suffix }}_nsis.exe
-      - name: Upload Windows NSIS ${{ matrix.mode }} artifact
-        if: startsWith(matrix.build.platform, 'windows')
-        uses: actions/upload-artifact@v4
-        with:
-          name: asmblive_${{ steps.normalise_platform.outputs.tag }}${{ steps.set_debug.outputs.suffix }}_nsis.exe
-          path: build/bin/asmblive_${{ steps.normalise_platform.outputs.tag }}${{ steps.set_debug.outputs.suffix }}_nsis.exe
 
       # MacOS
       - name: Build MacOS ${{ matrix.mode }} App
